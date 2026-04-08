@@ -689,6 +689,12 @@ select {
 }
 .btn-primary:hover { background: #2c2825; }
 .btn-primary:active { transform: scale(0.98); }
+.btn-primary:disabled {
+  background: var(--cream-border);
+  color: var(--ink-xlight);
+  cursor: not-allowed;
+  transform: none;
+}
 
 footer { background: var(--ink); color: rgba(250,250,249,0.35); text-align: center; padding: 28px 40px; font-size: 12px; line-height: 1.7; }
 footer a { color: rgba(250,250,249,0.45); text-decoration: none; }
@@ -1086,7 +1092,11 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
   </div>
 
   <div class="form-body">
-  <form id="intake-form">
+  <!-- Formspree form: action posts to your endpoint, hidden prompt field is injected on submit -->
+  <form id="intake-form" action="https://formspree.io/f/xgopbwdj" method="POST">
+
+    <!-- Hidden field: Claude-ready prompt built from all answers on submit -->
+    <input type="hidden" name="_subject" value="New Home Efficiency Report Intake — Neighborly Goods and Services">
 
     <!-- 1. ABOUT YOU -->
     <div class="section" id="s1">
@@ -1098,17 +1108,17 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
       <div class="field-row">
         <div class="field">
           <label>First name <span class="optional">(optional)</span></label>
-          <input type="text" name="first_name" placeholder="e.g. Sarah">
+          <input type="text" name="first_name" id="field_first_name" placeholder="e.g. Sarah">
         </div>
         <div class="field">
           <label>ZIP code <span class="hint">Used to identify local programs and costs</span></label>
-          <input type="text" name="zip" placeholder="e.g. 55113" maxlength="10">
+          <input type="text" name="zip" id="field_zip" placeholder="e.g. 55113" maxlength="10">
         </div>
       </div>
       <div class="field-row">
         <div class="field">
           <label>Household type</label>
-          <select name="household_type">
+          <select name="household_type" id="field_household_type">
             <option value="">Select…</option>
             <option>Single, no kids</option>
             <option>Single parent</option>
@@ -1121,12 +1131,12 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
         </div>
         <div class="field">
           <label>Number of people in the household</label>
-          <input type="number" name="household_size" min="1" max="20" placeholder="e.g. 4">
+          <input type="number" name="household_size" id="field_household_size" min="1" max="20" placeholder="e.g. 4">
         </div>
       </div>
       <div class="field">
         <label>Ages of any children in the home <span class="optional">(optional)</span> <span class="hint">e.g. 3</span></label>
-        <input type="text" name="children_ages" placeholder="e.g. 3">
+        <input type="text" name="children_ages" id="field_children_ages" placeholder="e.g. 3">
       </div>
       <div class="field">
         <label>Are you currently going through any major life transitions?</label>
@@ -1153,17 +1163,17 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
       <div class="field-row">
         <div class="field">
           <label>Approximate gross annual household income</label>
-          <div class="input-prefix"><span class="prefix">$</span><input type="number" name="gross_income" placeholder="e.g. 85000"></div>
+          <div class="input-prefix"><span class="prefix">$</span><input type="number" name="gross_income" id="field_gross_income" placeholder="e.g. 85000"></div>
         </div>
         <div class="field">
           <label>Approximate take-home pay per paycheck</label>
-          <div class="input-prefix"><span class="prefix">$</span><input type="number" name="take_home" placeholder="e.g. 2400"></div>
+          <div class="input-prefix"><span class="prefix">$</span><input type="number" name="take_home" id="field_take_home" placeholder="e.g. 2400"></div>
         </div>
       </div>
       <div class="field-row">
         <div class="field">
           <label>Pay frequency</label>
-          <select name="pay_frequency">
+          <select name="pay_frequency" id="field_pay_frequency">
             <option value="">Select…</option>
             <option>Weekly</option>
             <option>Every two weeks (bi-weekly)</option>
@@ -1173,7 +1183,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
         </div>
         <div class="field">
           <label>Other income sources</label>
-          <select name="other_income">
+          <select name="other_income" id="field_other_income">
             <option value="">Select…</option>
             <option>No, just my primary job</option>
             <option>Yes — side gig / gig economy</option>
@@ -1186,7 +1196,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
       </div>
       <div class="field">
         <label>Describe any side income or self-employment <span class="optional">(optional)</span> <span class="hint">What do you sell or do? Rough monthly or annual earnings?</span></label>
-        <textarea name="side_income_desc" placeholder="e.g. I do occasional DoorDash at $150/month"></textarea>
+        <textarea name="side_income_desc" id="field_side_income_desc" placeholder="e.g. I do occasional DoorDash at $150/month"></textarea>
       </div>
       <div class="field">
         <label>Dedicated emergency fund status</label>
@@ -1199,7 +1209,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
       </div>
       <div class="field">
         <label>Do you use a budget app or track your spending? <span class="hint">e.g. YNAB, Mint, spreadsheet, envelope method, nothing</span></label>
-        <input type="text" name="budgeting_tool" placeholder="e.g. YNAB, spreadsheet, nothing currently">
+        <input type="text" name="budgeting_tool" id="field_budgeting_tool" placeholder="e.g. YNAB, spreadsheet, nothing currently">
       </div>
       <div class="field">
         <label>Approximate total non-mortgage debt <span class="optional">(optional)</span></label>
@@ -1223,7 +1233,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
       <div class="field-row">
         <div class="field">
           <label>Home ownership status</label>
-          <select name="ownership">
+          <select name="ownership" id="field_ownership">
             <option value="">Select…</option>
             <option>I own my home</option>
             <option>I rent</option>
@@ -1232,13 +1242,13 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
         </div>
         <div class="field">
           <label>Monthly mortgage or rent payment</label>
-          <div class="input-prefix"><span class="prefix">$</span><input type="number" name="housing_payment" placeholder="e.g. 1285"></div>
+          <div class="input-prefix"><span class="prefix">$</span><input type="number" name="housing_payment" id="field_housing_payment" placeholder="e.g. 1285"></div>
         </div>
       </div>
       <div class="field-row">
         <div class="field">
           <label>Approximate square footage</label>
-          <select name="sq_ft">
+          <select name="sq_ft" id="field_sq_ft">
             <option value="">Select…</option>
             <option>Under 800 sq ft</option>
             <option>800–1,200 sq ft</option>
@@ -1249,7 +1259,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
         </div>
         <div class="field">
           <label>Approximate year home was built</label>
-          <select name="home_age">
+          <select name="home_age" id="field_home_age">
             <option value="">Select…</option>
             <option>Before 1950</option>
             <option>1950–1969</option>
@@ -1284,7 +1294,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
       <div class="field-row">
         <div class="field">
           <label>Thermostat type</label>
-          <select name="thermostat">
+          <select name="thermostat" id="field_thermostat">
             <option value="">Select…</option>
             <option>Smart thermostat (Nest, Ecobee, etc.)</option>
             <option>Programmable thermostat</option>
@@ -1294,7 +1304,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
         </div>
         <div class="field">
           <label>Water heater type</label>
-          <select name="water_heater">
+          <select name="water_heater" id="field_water_heater">
             <option value="">Select…</option>
             <option>Standard gas tank</option>
             <option>Standard electric tank</option>
@@ -1319,7 +1329,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
       </div>
       <div class="field">
         <label>Homeowners / renters insurance <span class="hint">Provider and monthly cost</span></label>
-        <input type="text" name="home_insurance" placeholder="e.g. Progressive, $208/mo">
+        <input type="text" name="home_insurance" id="field_home_insurance" placeholder="e.g. Progressive, $208/mo">
       </div>
     </div>
 
@@ -1333,21 +1343,21 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
       <div class="field-row">
         <div class="field">
           <label>Average monthly electric bill</label>
-          <div class="input-prefix"><span class="prefix">$</span><input type="number" name="electric_bill" placeholder="e.g. 95"></div>
+          <div class="input-prefix"><span class="prefix">$</span><input type="number" name="electric_bill" id="field_electric_bill" placeholder="e.g. 95"></div>
         </div>
         <div class="field">
           <label>Average monthly gas bill <span class="optional">(if applicable)</span></label>
-          <div class="input-prefix"><span class="prefix">$</span><input type="number" name="gas_bill" placeholder="e.g. 160"></div>
+          <div class="input-prefix"><span class="prefix">$</span><input type="number" name="gas_bill" id="field_gas_bill" placeholder="e.g. 160"></div>
         </div>
       </div>
       <div class="field-row">
         <div class="field">
           <label>Electric utility provider</label>
-          <input type="text" name="electric_provider" placeholder="e.g. Xcel Energy, ComEd, PG&E">
+          <input type="text" name="electric_provider" id="field_electric_provider" placeholder="e.g. Xcel Energy, ComEd, PG&E">
         </div>
         <div class="field">
           <label>Current utility rate plan</label>
-          <select name="utility_plan">
+          <select name="utility_plan" id="field_utility_plan">
             <option value="">Select…</option>
             <option>Standard / default plan</option>
             <option>Time-of-Use / Time-of-Day plan</option>
@@ -1370,16 +1380,16 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
       <div class="field-row">
         <div class="field">
           <label>Internet provider &amp; monthly cost</label>
-          <input type="text" name="internet" placeholder="e.g. Quantum Fiber, $45/mo">
+          <input type="text" name="internet" id="field_internet" placeholder="e.g. Quantum Fiber, $45/mo">
         </div>
         <div class="field">
           <label>Cell phone plan &amp; monthly cost</label>
-          <input type="text" name="phone" placeholder="e.g. Mint Mobile, $20/mo — 1 line">
+          <input type="text" name="phone" id="field_phone" placeholder="e.g. Mint Mobile, $20/mo — 1 line">
         </div>
       </div>
       <div class="field">
         <label>Other utilities <span class="hint">Water/sewer, trash, security system — provider and cost</span></label>
-        <textarea name="other_utilities" placeholder="e.g. City water/sewer $60/mo, ADT $35/mo, trash $28/mo"></textarea>
+        <textarea name="other_utilities" id="field_other_utilities" placeholder="e.g. City water/sewer $60/mo, ADT $35/mo, trash $28/mo"></textarea>
       </div>
     </div>
 
@@ -1393,7 +1403,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
       <div class="field-row">
         <div class="field">
           <label>Number of vehicles</label>
-          <select name="num_vehicles">
+          <select name="num_vehicles" id="field_num_vehicles">
             <option value="">Select…</option>
             <option>0 — no car</option>
             <option>1</option>
@@ -1403,13 +1413,13 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
         </div>
         <div class="field">
           <label>Car insurance — provider &amp; total monthly cost</label>
-          <input type="text" name="car_insurance" placeholder="e.g. Progressive, $57/mo">
+          <input type="text" name="car_insurance" id="field_car_insurance" placeholder="e.g. Progressive, $57/mo">
         </div>
       </div>
       <div class="field-row">
         <div class="field">
           <label>Estimated annual miles driven</label>
-          <select name="annual_miles">
+          <select name="annual_miles" id="field_annual_miles">
             <option value="">Select…</option>
             <option>Under 5,000</option>
             <option>5,000–10,000</option>
@@ -1420,7 +1430,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
         </div>
         <div class="field">
           <label>One-way commute distance</label>
-          <select name="commute">
+          <select name="commute" id="field_commute">
             <option value="">Select…</option>
             <option>I work fully from home</option>
             <option>Under 5 miles</option>
@@ -1462,7 +1472,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
       <div class="field-row">
         <div class="field">
           <label>Approximate monthly grocery spend</label>
-          <select name="grocery_spend">
+          <select name="grocery_spend" id="field_grocery_spend">
             <option value="">Select…</option>
             <option>Under $300</option>
             <option>$300–$500</option>
@@ -1473,7 +1483,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
         </div>
         <div class="field">
           <label>How often does your household eat out or order delivery?</label>
-          <select name="eating_out">
+          <select name="eating_out" id="field_eating_out">
             <option value="">Select…</option>
             <option>Rarely — we cook almost everything</option>
             <option>1–2 times per week</option>
@@ -1565,7 +1575,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
       <div class="field-row">
         <div class="field">
           <label>Number of credit cards currently open</label>
-          <select name="num_cards">
+          <select name="num_cards" id="field_num_cards">
             <option value="">Select…</option>
             <option>0</option>
             <option>1–2</option>
@@ -1576,7 +1586,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
         </div>
         <div class="field">
           <label>Do you carry a balance month to month?</label>
-          <select name="cc_balance">
+          <select name="cc_balance" id="field_cc_balance">
             <option value="">Select…</option>
             <option>No — I pay in full each month</option>
             <option>Sometimes</option>
@@ -1618,11 +1628,11 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
       <div class="field-row">
         <div class="field">
           <label>401k contribution rate <span class="optional">(if applicable)</span></label>
-          <input type="text" name="k401_pct" placeholder="e.g. 3% match only, 10%, not sure">
+          <input type="text" name="k401_pct" id="field_k401_pct" placeholder="e.g. 3% match only, 10%, not sure">
         </div>
         <div class="field">
           <label>Approximate total retirement savings</label>
-          <select name="total_retirement">
+          <select name="total_retirement" id="field_total_retirement">
             <option value="">Select…</option>
             <option>Under $25k</option>
             <option>$25k–$75k</option>
@@ -1680,11 +1690,11 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
       <div class="field-row">
         <div class="field">
           <label>Monthly health insurance premium (your share)</label>
-          <div class="input-prefix"><span class="prefix">$</span><input type="number" name="health_premium" placeholder="e.g. 150"></div>
+          <div class="input-prefix"><span class="prefix">$</span><input type="number" name="health_premium" id="field_health_premium" placeholder="e.g. 150"></div>
         </div>
         <div class="field">
           <label>Monthly childcare / daycare costs <span class="optional">(if applicable)</span></label>
-          <div class="input-prefix"><span class="prefix">$</span><input type="number" name="childcare" placeholder="e.g. 1545"></div>
+          <div class="input-prefix"><span class="prefix">$</span><input type="number" name="childcare" id="field_childcare" placeholder="e.g. 1545"></div>
         </div>
       </div>
     </div>
@@ -1744,18 +1754,18 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
       </div>
       <div class="field">
         <label>Is there anything else about your financial life or home setup that would be useful to know?</label>
-        <textarea name="anything_else" rows="4" placeholder="e.g. I just started a side business, I help support elderly parents, I have significant medical expenses, I have pets with high costs, I have an unusual housing situation…"></textarea>
+        <textarea name="anything_else" id="field_anything_else" rows="4" placeholder="e.g. I just started a side business, I help support elderly parents, I have significant medical expenses, I have pets with high costs, I have an unusual housing situation…"></textarea>
       </div>
       <div class="field">
         <label>What is the ONE thing you most want to get out of this consultation?</label>
-        <textarea name="main_goal" rows="3" placeholder="e.g. I want to know if I'm leaving money on the table. / I want to reduce my monthly bills by $200. / I want to know if my side business is worth it."></textarea>
+        <textarea name="main_goal" id="field_main_goal" rows="3" placeholder="e.g. I want to know if I'm leaving money on the table. / I want to reduce my monthly bills by $200. / I want to know if my side business is worth it."></textarea>
       </div>
     </div>
 
     <!-- SUBMIT -->
     <div class="submit-area">
       <p>When you click below, your intake form will be submitted to your report advisor. Your personalized Home Efficiency Report will be delivered to you digitally within 1–2 business days.</p>
-      <button type="button" class="btn-primary" onclick="submitForm()">&#10003;&nbsp; Submit My Intake Form</button>
+      <button type="button" class="btn-primary" id="submit-btn" onclick="submitForm()">&#10003;&nbsp; Submit My Intake Form</button>
     </div>
 
   </form>
@@ -1793,7 +1803,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
       </svg>
     </div>
     <h1>You're all set.<br><em>Thank you.</em></h1>
-    <p>Your intake form has been received. We've got everything we need to get started on your personalized Home Efficiency Report.</p>
+    <p>Your intake form has been received. You'll have your personalized Home Efficiency Report in your hands within 1–2 business days.</p>
   </div>
 
   <div class="thanks-body">
@@ -1955,20 +1965,263 @@ const obs = new IntersectionObserver(entries => {
 }, { threshold: 0.06 });
 sections.forEach(s => obs.observe(s));
 
-// ── SUBMIT → THANK YOU PAGE ───────────────────────────────────────────────
-function submitForm() {
-  // Pull the client's first name to personalize the thank-you page
+// ── HELPER: collect checked values for a field name ───────────────────────
+function getChecked(name) {
+  return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`))
+    .map(el => el.value).join(', ') || 'Not selected';
+}
+function getRadio(name) {
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  return el ? el.value : 'Not selected';
+}
+function getVal(id) {
+  const el = document.getElementById(id);
+  return (el && el.value && el.value.trim()) ? el.value.trim() : 'Not provided';
+}
+function getSelect(id) {
+  const el = document.getElementById(id);
+  return (el && el.value) ? el.value : 'Not selected';
+}
+
+// ── BUILD CLAUDE PROMPT ───────────────────────────────────────────────────
+function buildClaudePrompt() {
+  const sigName = document.getElementById('sig-name').value.trim();
+  const sigEmail = document.getElementById('sig-email').value.trim();
+  const now = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+  return `
+==========================================================
+NEIGHBORLY GOODS AND SERVICES LLC
+HOME EFFICIENCY REPORT — CLIENT INTAKE DATA
+==========================================================
+Submitted: ${now}
+Signed by: ${sigName || 'Not provided'}
+Contact email (if given): ${sigEmail || 'Not provided'}
+
+Please use all of the client data below to generate a comprehensive, beautifully formatted Home Efficiency Report as a PDF. The report should:
+- Use a warm, sage green and cream color palette with dark charcoal text (matching the Neighborly Goods brand aesthetic)
+- Include clear section headers with numbered sections
+- Lead each section with 2–3 key observations specific to this client's data, followed by actionable recommendations
+- Estimate dollar savings or income potential in dollars per year wherever possible
+- Highlight "quick wins" (things the client can do immediately with no cost) vs. "strategic moves" (things requiring more effort or investment)
+- Use tables or comparison layouts where relevant (e.g., current vs. optimized utility plan)
+- End with a prioritized action plan ranked by estimated impact
+- Be written in a warm, direct, neighbor-to-neighbor voice — not corporate or clinical
+- Include a brief disclaimer at the end that this is for educational awareness only and not professional financial, legal, or tax advice
+
+----------------------------------------------------------
+SECTION 1: ABOUT THE CLIENT
+----------------------------------------------------------
+First name: ${getVal('field_first_name')}
+ZIP code: ${getVal('field_zip')}
+Household type: ${getSelect('field_household_type')}
+Household size: ${getVal('field_household_size')} people
+Children's ages: ${getVal('field_children_ages')}
+Life transitions underway: ${getChecked('transition')}
+
+----------------------------------------------------------
+SECTION 2: INCOME & FINANCES
+----------------------------------------------------------
+Gross annual household income: $${getVal('field_gross_income')}
+Take-home pay per paycheck: $${getVal('field_take_home')}
+Pay frequency: ${getSelect('field_pay_frequency')}
+Other income sources: ${getSelect('field_other_income')}
+Side income / self-employment details: ${getVal('field_side_income_desc')}
+Emergency fund status: ${getRadio('emergency_fund')}
+Budgeting tool or method: ${getVal('field_budgeting_tool')}
+Total non-mortgage debt: ${getRadio('total_debt')}
+
+----------------------------------------------------------
+SECTION 3: HOME
+----------------------------------------------------------
+Ownership status: ${getSelect('field_ownership')}
+Monthly housing payment: $${getVal('field_housing_payment')}
+Square footage: ${getSelect('field_sq_ft')}
+Year built: ${getSelect('field_home_age')}
+Renovation / weatherization history: ${getRadio('renovation')}
+Heating & cooling systems: ${getChecked('hvac')}
+Thermostat type: ${getSelect('field_thermostat')}
+Water heater type: ${getSelect('field_water_heater')}
+Underutilized spaces: ${getChecked('space')}
+Home/renters insurance: ${getVal('field_home_insurance')}
+
+----------------------------------------------------------
+SECTION 4: UTILITIES & ENERGY
+----------------------------------------------------------
+Average monthly electric bill: $${getVal('field_electric_bill')}
+Average monthly gas bill: $${getVal('field_gas_bill')}
+Electric utility provider: ${getVal('field_electric_provider')}
+Current rate plan: ${getSelect('field_utility_plan')}
+Solar / alternative energy: ${getChecked('solar')}
+Internet provider & cost: ${getVal('field_internet')}
+Cell phone plan & cost: ${getVal('field_phone')}
+Other utilities: ${getVal('field_other_utilities')}
+
+----------------------------------------------------------
+SECTION 5: TRANSPORTATION
+----------------------------------------------------------
+Number of vehicles: ${getSelect('field_num_vehicles')}
+Car insurance provider & cost: ${getVal('field_car_insurance')}
+Annual miles driven: ${getSelect('field_annual_miles')}
+One-way commute: ${getSelect('field_commute')}
+Days per week in office: ${getRadio('office_days')}
+Tracks mileage for tax/reimbursement: ${getRadio('mileage_tracking')}
+
+----------------------------------------------------------
+SECTION 6: GROCERIES & SHOPPING
+----------------------------------------------------------
+Monthly grocery spend: ${getSelect('field_grocery_spend')}
+Frequency eating out / delivery: ${getSelect('field_eating_out')}
+Primary grocery stores: ${getChecked('grocery_stores')}
+Savings apps / coupon usage: ${getChecked('coupon_apps')}
+Food storage or production: ${getChecked('food_storage')}
+Warehouse club membership: ${getRadio('warehouse_membership')}
+
+----------------------------------------------------------
+SECTION 7: CREDIT CARDS & BANKING
+----------------------------------------------------------
+Credit score range: ${getRadio('credit_score')}
+Credit card rewards focus: ${getChecked('cc_rewards')}
+Number of credit cards open: ${getSelect('field_num_cards')}
+Carries a balance month to month: ${getSelect('field_cc_balance')}
+Bank accounts in use: ${getChecked('bank_accounts')}
+
+----------------------------------------------------------
+SECTION 8: RETIREMENT, BENEFITS & TAXES
+----------------------------------------------------------
+Retirement accounts contributing to: ${getChecked('retirement')}
+401k contribution rate: ${getVal('field_k401_pct')}
+Total retirement savings: ${getSelect('field_total_retirement')}
+Tax-advantaged accounts in use: ${getChecked('tax_accounts')}
+Tax filing method: ${getRadio('tax_filing')}
+Tax strategies in use: ${getChecked('tax_strategies')}
+Employer benefits with access to: ${getChecked('emp_benefits')}
+Monthly health insurance premium: $${getVal('field_health_premium')}
+Monthly childcare costs: $${getVal('field_childcare')}
+
+----------------------------------------------------------
+SECTION 9: LIFESTYLE, GOALS & PRIORITIES
+----------------------------------------------------------
+Paid subscriptions: ${getChecked('subscriptions')}
+Local support network: ${getRadio('support_network')}
+Preparedness / food stores: ${getRadio('prepper')}
+Top financial priorities: ${getChecked('priorities')}
+Additional context: ${getVal('field_anything_else')}
+Primary goal for this consultation: ${getVal('field_main_goal')}
+
+==========================================================
+END OF INTAKE DATA
+==========================================================
+`.trim();
+}
+
+// ── SUBMIT → FORMSPREE + THANK YOU PAGE ──────────────────────────────────
+async function submitForm() {
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.innerHTML = '&#8987;&nbsp; Submitting…';
+
+  // Grab display name for thank-you page
   const firstName = document.querySelector('[name="first_name"]').value.trim();
   const sigName   = document.getElementById('sig-name').value.trim();
   const displayName = firstName || sigName || '';
 
-  if (displayName) {
-    const note = document.getElementById('thanks-name-note');
-    document.getElementById('thanks-name-text').textContent = displayName;
-    note.style.display = 'block';
+  // Build Claude-ready prompt
+  const claudePrompt = buildClaudePrompt();
+
+  // Build a plain JS object — safer than FormData across all browsers/environments
+  const payload = {
+    _subject: 'New Home Efficiency Report Intake — Neighborly Goods and Services',
+    signed_by: sigName,
+    contact_email: document.getElementById('sig-email').value.trim(),
+    first_name: getVal('field_first_name'),
+    zip: getVal('field_zip'),
+    household_type: getSelect('field_household_type'),
+    household_size: getVal('field_household_size'),
+    children_ages: getVal('field_children_ages'),
+    life_transitions: getChecked('transition'),
+    gross_income: getVal('field_gross_income'),
+    take_home: getVal('field_take_home'),
+    pay_frequency: getSelect('field_pay_frequency'),
+    other_income: getSelect('field_other_income'),
+    side_income_desc: getVal('field_side_income_desc'),
+    emergency_fund: getRadio('emergency_fund'),
+    budgeting_tool: getVal('field_budgeting_tool'),
+    total_debt: getRadio('total_debt'),
+    ownership: getSelect('field_ownership'),
+    housing_payment: getVal('field_housing_payment'),
+    sq_ft: getSelect('field_sq_ft'),
+    home_age: getSelect('field_home_age'),
+    renovation: getRadio('renovation'),
+    hvac: getChecked('hvac'),
+    thermostat: getSelect('field_thermostat'),
+    water_heater: getSelect('field_water_heater'),
+    underutilized_spaces: getChecked('space'),
+    home_insurance: getVal('field_home_insurance'),
+    electric_bill: getVal('field_electric_bill'),
+    gas_bill: getVal('field_gas_bill'),
+    electric_provider: getVal('field_electric_provider'),
+    utility_plan: getSelect('field_utility_plan'),
+    solar: getChecked('solar'),
+    internet: getVal('field_internet'),
+    phone: getVal('field_phone'),
+    other_utilities: getVal('field_other_utilities'),
+    num_vehicles: getSelect('field_num_vehicles'),
+    car_insurance: getVal('field_car_insurance'),
+    annual_miles: getSelect('field_annual_miles'),
+    commute: getSelect('field_commute'),
+    office_days: getRadio('office_days'),
+    mileage_tracking: getRadio('mileage_tracking'),
+    grocery_spend: getSelect('field_grocery_spend'),
+    eating_out: getSelect('field_eating_out'),
+    grocery_stores: getChecked('grocery_stores'),
+    coupon_apps: getChecked('coupon_apps'),
+    food_storage: getChecked('food_storage'),
+    warehouse_membership: getRadio('warehouse_membership'),
+    credit_score: getRadio('credit_score'),
+    cc_rewards: getChecked('cc_rewards'),
+    num_cards: getSelect('field_num_cards'),
+    cc_balance: getSelect('field_cc_balance'),
+    bank_accounts: getChecked('bank_accounts'),
+    retirement_accounts: getChecked('retirement'),
+    k401_pct: getVal('field_k401_pct'),
+    total_retirement: getSelect('field_total_retirement'),
+    tax_accounts: getChecked('tax_accounts'),
+    tax_filing: getRadio('tax_filing'),
+    tax_strategies: getChecked('tax_strategies'),
+    emp_benefits: getChecked('emp_benefits'),
+    health_premium: getVal('field_health_premium'),
+    childcare: getVal('field_childcare'),
+    subscriptions: getChecked('subscriptions'),
+    support_network: getRadio('support_network'),
+    prepper: getRadio('prepper'),
+    priorities: getChecked('priorities'),
+    anything_else: getVal('field_anything_else'),
+    main_goal: getVal('field_main_goal'),
+    claude_prompt: claudePrompt
+  };
+
+  // Submit as JSON — fully supported by Formspree, no clone issues
+  try {
+    await fetch('https://formspree.io/f/xgopbwdj', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
+  } catch (err) {
+    console.warn('Formspree submission error:', err);
   }
 
-  // Switch pages
+  // Personalize thank-you page
+  if (displayName) {
+    document.getElementById('thanks-name-text').textContent = displayName;
+    document.getElementById('thanks-name-note').style.display = 'block';
+  }
+
+  // Switch to thank-you page — user never sees the prompt
   document.getElementById('page-form').classList.remove('active');
   document.getElementById('page-thanks').classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
