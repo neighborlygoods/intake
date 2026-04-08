@@ -1091,12 +1091,18 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
     <span class="progress-pct" id="progress-pct">0%</span>
   </div>
 
-  <div class="form-body">
-  <!-- Formspree form: action posts to your endpoint, hidden prompt field is injected on submit -->
-  <form id="intake-form" action="https://formspree.io/f/xgopbwdj" method="POST">
+  <!-- Hidden iframe: form posts into this so the browser never navigates away -->
+  <iframe name="formspree-sink" id="formspree-sink" style="display:none;" aria-hidden="true"></iframe>
 
-    <!-- Hidden field: Claude-ready prompt built from all answers on submit -->
+  <div class="form-body">
+  <form id="intake-form"
+        action="https://formspree.io/f/xgopbwdj"
+        method="POST"
+        target="formspree-sink">
+
+    <!-- Hidden fields sent to Formspree -->
     <input type="hidden" name="_subject" value="New Home Efficiency Report Intake — Neighborly Goods and Services">
+    <input type="hidden" name="claude_prompt" id="claude_prompt_field" value="">
 
     <!-- 1. ABOUT YOU -->
     <div class="section" id="s1">
@@ -1808,8 +1814,8 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
 
   <div class="thanks-body">
 
-    <div id="thanks-name-note" class="thanks-name-callout" style="display:none;">
-      <strong id="thanks-name-text"></strong> — we appreciate you taking the time to share the details of your household with us. The more you gave us to work with, the more useful your report will be.
+    <div id="thanks-name-note" class="thanks-name-callout">
+      We appreciate you taking the time to share the details of your household with us. The more you gave us to work with, the more useful your report will be.
     </div>
 
     <div class="thanks-card">
@@ -2116,104 +2122,21 @@ END OF INTAKE DATA
 }
 
 // ── SUBMIT → FORMSPREE + THANK YOU PAGE ──────────────────────────────────
-async function submitForm() {
+function submitForm() {
   const btn = document.getElementById('submit-btn');
   btn.disabled = true;
   btn.innerHTML = '&#8987;&nbsp; Submitting…';
+
+  // Build and inject the Claude-ready prompt into the hidden field
+  document.getElementById('claude_prompt_field').value = buildClaudePrompt();
 
   // Grab display name for thank-you page
   const firstName = document.querySelector('[name="first_name"]').value.trim();
   const sigName   = document.getElementById('sig-name').value.trim();
   const displayName = firstName || sigName || '';
 
-  // Build Claude-ready prompt
-  const claudePrompt = buildClaudePrompt();
-
-  // Build a plain JS object — safer than FormData across all browsers/environments
-  const payload = {
-    _subject: 'New Home Efficiency Report Intake — Neighborly Goods and Services',
-    signed_by: sigName,
-    contact_email: document.getElementById('sig-email').value.trim(),
-    first_name: getVal('field_first_name'),
-    zip: getVal('field_zip'),
-    household_type: getSelect('field_household_type'),
-    household_size: getVal('field_household_size'),
-    children_ages: getVal('field_children_ages'),
-    life_transitions: getChecked('transition'),
-    gross_income: getVal('field_gross_income'),
-    take_home: getVal('field_take_home'),
-    pay_frequency: getSelect('field_pay_frequency'),
-    other_income: getSelect('field_other_income'),
-    side_income_desc: getVal('field_side_income_desc'),
-    emergency_fund: getRadio('emergency_fund'),
-    budgeting_tool: getVal('field_budgeting_tool'),
-    total_debt: getRadio('total_debt'),
-    ownership: getSelect('field_ownership'),
-    housing_payment: getVal('field_housing_payment'),
-    sq_ft: getSelect('field_sq_ft'),
-    home_age: getSelect('field_home_age'),
-    renovation: getRadio('renovation'),
-    hvac: getChecked('hvac'),
-    thermostat: getSelect('field_thermostat'),
-    water_heater: getSelect('field_water_heater'),
-    underutilized_spaces: getChecked('space'),
-    home_insurance: getVal('field_home_insurance'),
-    electric_bill: getVal('field_electric_bill'),
-    gas_bill: getVal('field_gas_bill'),
-    electric_provider: getVal('field_electric_provider'),
-    utility_plan: getSelect('field_utility_plan'),
-    solar: getChecked('solar'),
-    internet: getVal('field_internet'),
-    phone: getVal('field_phone'),
-    other_utilities: getVal('field_other_utilities'),
-    num_vehicles: getSelect('field_num_vehicles'),
-    car_insurance: getVal('field_car_insurance'),
-    annual_miles: getSelect('field_annual_miles'),
-    commute: getSelect('field_commute'),
-    office_days: getRadio('office_days'),
-    mileage_tracking: getRadio('mileage_tracking'),
-    grocery_spend: getSelect('field_grocery_spend'),
-    eating_out: getSelect('field_eating_out'),
-    grocery_stores: getChecked('grocery_stores'),
-    coupon_apps: getChecked('coupon_apps'),
-    food_storage: getChecked('food_storage'),
-    warehouse_membership: getRadio('warehouse_membership'),
-    credit_score: getRadio('credit_score'),
-    cc_rewards: getChecked('cc_rewards'),
-    num_cards: getSelect('field_num_cards'),
-    cc_balance: getSelect('field_cc_balance'),
-    bank_accounts: getChecked('bank_accounts'),
-    retirement_accounts: getChecked('retirement'),
-    k401_pct: getVal('field_k401_pct'),
-    total_retirement: getSelect('field_total_retirement'),
-    tax_accounts: getChecked('tax_accounts'),
-    tax_filing: getRadio('tax_filing'),
-    tax_strategies: getChecked('tax_strategies'),
-    emp_benefits: getChecked('emp_benefits'),
-    health_premium: getVal('field_health_premium'),
-    childcare: getVal('field_childcare'),
-    subscriptions: getChecked('subscriptions'),
-    support_network: getRadio('support_network'),
-    prepper: getRadio('prepper'),
-    priorities: getChecked('priorities'),
-    anything_else: getVal('field_anything_else'),
-    main_goal: getVal('field_main_goal'),
-    claude_prompt: claudePrompt
-  };
-
-  // Submit as JSON — fully supported by Formspree, no clone issues
-  try {
-    await fetch('https://formspree.io/f/xgopbwdj', {
-      method: 'POST',
-      body: JSON.stringify(payload),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    });
-  } catch (err) {
-    console.warn('Formspree submission error:', err);
-  }
+  // Submit the form natively into the hidden iframe (no CORS, no fetch)
+  document.getElementById('intake-form').submit();
 
   // Personalize thank-you page
   if (displayName) {
@@ -2221,7 +2144,7 @@ async function submitForm() {
     document.getElementById('thanks-name-note').style.display = 'block';
   }
 
-  // Switch to thank-you page — user never sees the prompt
+  // Switch to thank-you page — user never sees the prompt or a redirect
   document.getElementById('page-form').classList.remove('active');
   document.getElementById('page-thanks').classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
