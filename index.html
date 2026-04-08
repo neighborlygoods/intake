@@ -907,6 +907,91 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
   .thanks-hero { padding: 56px 24px 52px; }
   .thanks-body { padding: 36px 24px 48px; }
 }
+
+/* ── SUBMIT NEXT CARD ── */
+.submit-next-card {
+  background: var(--white);
+  border: 1px solid var(--cream-border);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 32px;
+  text-align: left;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+.submit-next-header {
+  background: var(--sage-light);
+  border-bottom: 1px solid #ccddd3;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.submit-next-icon {
+  width: 32px; height: 32px;
+  background: var(--sage);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.submit-next-icon svg { width: 18px; height: 18px; }
+.submit-next-header h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 17px;
+  color: var(--sage-dark);
+  font-weight: 400;
+}
+.submit-next-steps {
+  padding: 8px 24px;
+}
+.submit-next-step {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--cream-border);
+}
+.submit-next-step:last-child { border-bottom: none; }
+.submit-next-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--sage-light);
+  border: 1px solid #ccddd3;
+  color: var(--sage-dark);
+  font-size: 12px;
+  font-weight: 500;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.submit-next-text strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 3px;
+}
+.submit-next-text span {
+  font-size: 13px;
+  color: var(--ink-light);
+  line-height: 1.6;
+}
+.submit-next-note {
+  margin: 0 24px 20px;
+  background: var(--sage-light);
+  border: 1px solid #ccddd3;
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.submit-next-note svg { flex-shrink: 0; margin-top: 1px; }
+.submit-next-note p {
+  font-size: 12px;
+  color: var(--sage-dark);
+  line-height: 1.65;
+  margin: 0;
+}
 </style>
 <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
 </head>
@@ -1098,6 +1183,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
     <!-- Hidden fields sent to Formspree -->
     <input type="hidden" name="_subject" value="New Home Efficiency Report Intake — Neighborly Goods and Services">
     <input type="hidden" name="_replyto" value="neighborlygoodsandservices@gmail.com">
+    <input type="hidden" name="_next" id="next_field" value="">
 
     <!-- 1. ABOUT YOU -->
     <div class="section" id="s1">
@@ -1765,8 +1851,51 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
 
     <!-- SUBMIT -->
     <div class="submit-area">
-      <p>When you click below, your intake form will be submitted to your report advisor. Your personalized Home Efficiency Report will be delivered to you digitally within 1–2 business days.</p>
+
+      <!-- What happens next -->
+      <div class="submit-next-card">
+        <div class="submit-next-header">
+          <div class="submit-next-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>What happens after you submit</h3>
+        </div>
+        <div class="submit-next-steps">
+          <div class="submit-next-step">
+            <div class="submit-next-num">1</div>
+            <div class="submit-next-text">
+              <strong>Your form is in our hands</strong>
+              <span>We’ll receive your intake answers and begin reviewing your household profile.</span>
+            </div>
+          </div>
+          <div class="submit-next-step">
+            <div class="submit-next-num">2</div>
+            <div class="submit-next-text">
+              <strong>Your report is prepared</strong>
+              <span>We’ll research programs, rates, strategies, and opportunities specific to your ZIP code, income, and situation.</span>
+            </div>
+          </div>
+          <div class="submit-next-step">
+            <div class="submit-next-num">3</div>
+            <div class="submit-next-text">
+              <strong>Delivery within 1–2 business days</strong>
+              <span>Your personalized Home Efficiency Report arrives digitally. Keep an eye out — it’s worth the read.</span>
+            </div>
+          </div>
+        </div>
+        <div class="submit-next-note">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+            <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#4a7c59" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <p>All answers are confidential and used only to prepare your report. Follow-up consultations to walk through your results are available separately.</p>
+        </div>
+      </div>
+
       <button type="button" class="btn-primary" id="submit-btn" onclick="submitForm()">&#10003;&nbsp; Submit My Intake Form</button>
+      <p style="margin-top:14px;font-size:12px;color:var(--ink-xlight);">By submitting, you confirm your agreement with the services agreement signed at the start of this form.</p>
+
     </div>
 
   </form>
@@ -2116,6 +2245,17 @@ END OF INTAKE DATA
 `.trim();
 }
 
+// ── DETECT RETURN FROM FORMSPREE ─────────────────────────────────────────
+// If Formspree redirects back with ?submitted=1, show our thank-you page
+(function() {
+  if (window.location.search.includes('submitted=1')) {
+    document.getElementById('page-legal').classList.remove('active');
+    document.getElementById('page-form').classList.remove('active');
+    document.getElementById('page-thanks').classList.add('active');
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+})();
+
 // ── FORMSPREE AJAX INIT ───────────────────────────────────────────────────
 // Runs after the @formspree/ajax CDN script loads (defer)
 window.formspree = window.formspree || function() { (formspree.q = formspree.q || []).push(arguments); };
@@ -2135,7 +2275,11 @@ function submitForm() {
   btn.disabled = true;
   btn.innerHTML = '&#8987;&nbsp; Submitting…';
 
-  // Collect all form data into a plain object
+  // Set _next so if XHR fails and browser falls back to native POST,
+  // Formspree redirects back to our page's thank-you state
+  const base = window.location.href.split('?')[0].split('#')[0];
+  document.getElementById('next_field').value = base + '?submitted=1';
+
   const data = {
     '_subject': 'New Home Efficiency Report Intake — Neighborly Goods and Services',
     'Signed By': document.getElementById('sig-name').value.trim(),
@@ -2206,28 +2350,18 @@ function submitForm() {
     '9 - Main Goal': getVal('field_main_goal')
   };
 
-  // Use XMLHttpRequest — older API, works without CORS preflight for form-encoded data
-  const xhr = new XMLHttpRequest();
-  xhr.open('POST', 'https://formspree.io/f/xgopbwdj');
-  xhr.setRequestHeader('Accept', 'application/json');
-  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-  xhr.onload = function() {
-    showThanks();
-  };
-  xhr.onerror = function() {
-    // Show thanks page even on network error — submission may still have gone through
-    showThanks();
-  };
-  xhr.ontimeout = function() {
-    showThanks();
-  };
-  xhr.timeout = 8000;
-
   const body = Object.entries(data)
     .map(([k, v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v || ''))
     .join('&');
 
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', 'https://formspree.io/f/xgopbwdj');
+  xhr.setRequestHeader('Accept', 'application/json');
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.onload  = function() { showThanks(); };
+  xhr.onerror = function() { showThanks(); };
+  xhr.ontimeout = function() { showThanks(); };
+  xhr.timeout = 8000;
   xhr.send(body);
 }
 
