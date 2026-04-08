@@ -4,112 +4,1977 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Home Efficiency Consultation — Neighborly Goods and Services LLC</title>
-
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
 <style>
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: #fafaf9;
-  color: #1c1917;
-  margin: 0;
+:root {
+  --ink: #1c1917;
+  --ink-mid: #44403c;
+  --ink-light: #78716c;
+  --ink-xlight: #a8a29e;
+  --cream: #fafaf9;
+  --cream-dark: #f5f5f4;
+  --cream-border: #e7e5e4;
+  --sage: #4a7c59;
+  --sage-light: #e8f0eb;
+  --sage-mid: #6fa37d;
+  --sage-dark: #3d6b4a;
+  --amber: #b45309;
+  --amber-light: #fef3c7;
+  --red: #9f1239;
+  --red-light: #fff1f2;
+  --blue: #1e40af;
+  --blue-light: #eff6ff;
+  --white: #ffffff;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--cream); color: var(--ink); min-height: 100vh; }
+
+/* ── PAGES ── */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ══════════════════════════════════════
+   LEGAL AGREEMENT PAGE
+══════════════════════════════════════ */
+.legal-page { min-height: 100vh; display: flex; flex-direction: column; }
+
+.legal-nav {
+  background: var(--ink);
+  padding: 18px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.brand-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  object-fit: contain;
+  background: rgba(255,255,255,0.08);
+  padding: 4px;
+}
+.brand-logo-img {
+  height: 52px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  filter: brightness(0) invert(1);
+}
+.brand-logo-img.dark-bg {
+  filter: brightness(0) invert(1);
+}
+.brand-logo-img.light-bg {
+  filter: brightness(0);
+}
+.brand-logo-placeholder {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: rgba(111,163,125,0.25);
+  border: 1px solid rgba(111,163,125,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.brand-logo-placeholder svg {
+  width: 22px;
+  height: 22px;
+  fill: var(--sage-mid);
+}
+.brand-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 17px;
+  color: var(--white);
+  line-height: 1.2;
+}
+.brand-tagline {
+  font-size: 11px;
+  color: rgba(255,255,255,0.45);
+  font-weight: 300;
+  letter-spacing: 0.04em;
+}
+.nav-badge {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sage-mid);
+  border: 1px solid rgba(111,163,125,0.35);
+  padding: 4px 10px;
+  border-radius: 20px;
 }
 
-/* Keep your styling — trimmed for clarity */
-.container {
-  max-width: 760px;
+.legal-hero {
+  background: linear-gradient(160deg, #1c1917 0%, #2d2926 60%, #1a2e1f 100%);
+  padding: 56px 40px 52px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.legal-hero::before {
+  content: '';
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 360px; height: 360px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(74,124,89,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.legal-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -100px; left: -60px;
+  width: 280px; height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(74,124,89,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.legal-hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(26px, 4vw, 38px);
+  color: var(--white);
+  line-height: 1.2;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 1;
+}
+.legal-hero h1 em { font-style: italic; color: var(--sage-mid); }
+.legal-hero p {
+  font-size: 15px;
+  color: rgba(255,255,255,0.6);
+  max-width: 520px;
   margin: 0 auto;
-  padding: 40px;
+  line-height: 1.75;
+  position: relative;
+  z-index: 1;
 }
 
-.field {
+.legal-body {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 48px 40px 32px;
+  flex: 1;
+}
+
+.agreement-card {
+  background: var(--white);
+  border: 1px solid var(--cream-border);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 28px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+.agreement-card-header {
+  background: var(--sage-light);
+  border-bottom: 1px solid #ccddd3;
+  padding: 18px 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.agreement-card-header .icon {
+  width: 32px; height: 32px;
+  background: var(--sage);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.agreement-card-header .icon svg { width: 16px; height: 16px; fill: white; }
+.agreement-card-header h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 17px;
+  color: var(--sage-dark);
+  font-weight: 400;
+}
+.agreement-card-body {
+  padding: 28px;
+}
+
+.agreement-section { margin-bottom: 24px; }
+.agreement-section:last-child { margin-bottom: 0; }
+.agreement-section h3 {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 10px;
+}
+.agreement-section p {
+  font-size: 14px;
+  color: var(--ink-mid);
+  line-height: 1.8;
+}
+.agreement-section p + p { margin-top: 10px; }
+
+.highlight-box {
+  background: var(--sage-light);
+  border-left: 3px solid var(--sage);
+  border-radius: 0 8px 8px 0;
+  padding: 16px 20px;
+  margin: 16px 0;
+}
+.highlight-box p {
+  font-size: 14px;
+  color: var(--sage-dark);
+  line-height: 1.75;
+  font-style: italic;
+}
+
+.services-list {
+  list-style: none;
+  margin: 12px 0;
+}
+.services-list li {
+  font-size: 14px;
+  color: var(--ink-mid);
+  padding: 6px 0 6px 22px;
+  position: relative;
+  line-height: 1.6;
+  border-bottom: 1px solid var(--cream-border);
+}
+.services-list li:last-child { border-bottom: none; }
+.services-list li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 13px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--sage-mid);
+}
+
+.not-list {
+  list-style: none;
+  margin: 12px 0;
+}
+.not-list li {
+  font-size: 14px;
+  color: var(--ink-mid);
+  padding: 6px 0 6px 22px;
+  position: relative;
+  line-height: 1.6;
+}
+.not-list li::before {
+  content: '✕';
+  position: absolute;
+  left: 0; top: 6px;
+  font-size: 11px;
+  color: var(--red);
+  font-weight: 500;
+}
+
+.sig-card {
+  background: var(--white);
+  border: 1px solid var(--cream-border);
+  border-radius: 16px;
+  padding: 32px 28px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+.sig-card h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.sig-card p {
+  font-size: 13px;
+  color: var(--ink-light);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+.sig-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.sig-field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-mid);
+  margin-bottom: 6px;
+  letter-spacing: 0.02em;
+}
+.sig-field input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid var(--cream-border);
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--ink);
+  background: var(--cream);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.sig-field input:focus {
+  outline: none;
+  border-color: var(--sage);
+  box-shadow: 0 0 0 3px rgba(74,124,89,0.1);
+  background: var(--white);
+}
+
+.sig-canvas-wrap {
   margin-bottom: 20px;
 }
+.sig-canvas-wrap label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-mid);
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+}
+.sig-canvas-container {
+  position: relative;
+  border: 1px solid var(--cream-border);
+  border-radius: 8px;
+  background: var(--cream);
+  overflow: hidden;
+}
+#sig-canvas {
+  display: block;
+  width: 100%;
+  height: 120px;
+  cursor: crosshair;
+  touch-action: none;
+}
+.sig-canvas-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.sig-canvas-placeholder span {
+  font-family: 'DM Serif Display', serif;
+  font-size: 15px;
+  color: var(--ink-xlight);
+  font-style: italic;
+}
+.sig-canvas-container:has(#sig-canvas.signed) .sig-canvas-placeholder { opacity: 0; }
+.sig-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+.btn-clear {
+  font-size: 12px;
+  color: var(--ink-light);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.btn-clear:hover { color: var(--ink); }
+
+.checkbox-agree {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 16px;
+  background: var(--cream);
+  border-radius: 8px;
+  border: 1px solid var(--cream-border);
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.checkbox-agree:has(input:checked) {
+  border-color: var(--sage);
+  background: var(--sage-light);
+}
+.checkbox-agree input[type="checkbox"] {
+  width: 18px; height: 18px;
+  accent-color: var(--sage);
+  flex-shrink: 0;
+  margin-top: 2px;
+  cursor: pointer;
+}
+.checkbox-agree p {
+  font-size: 13px;
+  color: var(--ink-mid);
+  line-height: 1.6;
+  margin: 0;
+}
+.checkbox-agree p strong { font-weight: 500; color: var(--ink); }
+
+#timestamp-display {
+  font-size: 12px;
+  color: var(--ink-xlight);
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+.btn-proceed {
+  width: 100%;
+  padding: 16px 24px;
+  background: var(--sage);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.btn-proceed:hover { background: var(--sage-dark); }
+.btn-proceed:active { transform: scale(0.99); }
+.btn-proceed:disabled {
+  background: var(--cream-border);
+  color: var(--ink-xlight);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.legal-footer {
+  text-align: center;
+  padding: 24px 40px 32px;
+  font-size: 12px;
+  color: var(--ink-xlight);
+  line-height: 1.7;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* ══════════════════════════════════════
+   INTAKE FORM PAGE
+══════════════════════════════════════ */
+.hero {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 0;
+}
+.hero-inner {
+  padding: 48px 40px 44px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-inner::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 320px; height: 320px;
+  border-radius: 50%;
+  background: rgba(74,124,89,0.12);
+  pointer-events: none;
+}
+.hero-inner::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; left: 30%;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.03);
+  pointer-events: none;
+}
+.hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  position: relative;
+  z-index: 1;
+}
+.hero-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sage-mid);
+  border: 1px solid rgba(111,163,125,0.4);
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+.hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(26px, 4.5vw, 40px);
+  line-height: 1.15;
+  margin-bottom: 14px;
+  max-width: 540px;
+  position: relative;
+  z-index: 1;
+}
+.hero h1 em { font-style: italic; color: var(--sage-mid); }
+.hero p {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(250,250,249,0.65);
+  max-width: 480px;
+  line-height: 1.75;
+  margin-bottom: 28px;
+  position: relative;
+  z-index: 1;
+}
+.hero-meta {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+.hero-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: rgba(250,250,249,0.5);
+}
+.hero-meta-item .dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--sage-mid);
+  flex-shrink: 0;
+}
+.hero-signed-banner {
+  background: rgba(74,124,89,0.15);
+  border-top: 1px solid rgba(111,163,125,0.2);
+  padding: 10px 40px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--sage-mid);
+}
+.hero-signed-banner svg { width: 14px; height: 14px; fill: var(--sage-mid); flex-shrink: 0; }
+
+/* Progress */
+.progress-wrap {
+  background: white;
+  border-bottom: 1px solid var(--cream-border);
+  padding: 13px 40px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.progress-label { font-size: 12px; color: var(--ink-light); white-space: nowrap; min-width: 80px; }
+.progress-bar { flex: 1; height: 3px; background: var(--cream-border); border-radius: 2px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--sage); border-radius: 2px; transition: width 0.4s ease; width: 0%; }
+.progress-pct { font-size: 12px; font-weight: 500; color: var(--sage); min-width: 36px; text-align: right; }
+
+/* Form layout */
+.form-body { max-width: 760px; margin: 0 auto; padding: 48px 40px 80px; }
+
+.section { margin-bottom: 52px; opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+.section.visible { opacity: 1; transform: none; }
+
+.section-label { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+.section-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.section-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--ink); }
+.section-divider { flex: 1; height: 1px; background: var(--cream-border); }
+
+.field { margin-bottom: 22px; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.field-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
 
 label {
   display: block;
-  font-size: 14px;
-  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-mid);
+  margin-bottom: 7px;
+  line-height: 1.4;
 }
+label .optional { font-weight: 300; color: var(--ink-xlight); font-size: 12px; margin-left: 4px; }
+label .hint { display: block; font-weight: 300; font-size: 12px; color: var(--ink-light); margin-top: 2px; line-height: 1.5; }
 
-input, textarea, select {
+input[type="text"], input[type="number"], input[type="email"], select, textarea {
   width: 100%;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #e7e5e4;
-  font-size: 14px;
-}
-
-button {
-  background: #1c1917;
-  color: white;
-  padding: 14px 28px;
-  border: none;
+  padding: 11px 14px;
+  border: 1px solid var(--cream-border);
   border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--ink);
+  background: white;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--sage);
+  box-shadow: 0 0 0 3px rgba(74,124,89,0.1);
+}
+textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2378716c' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
   cursor: pointer;
 }
 
-button:hover {
-  background: #2c2825;
+.check-group, .radio-group { display: flex; flex-wrap: wrap; gap: 8px; }
+.check-group label, .radio-group label {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid var(--cream-border);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--ink-mid);
+  background: white;
+  transition: all 0.15s;
+  user-select: none;
+}
+.check-group label:hover, .radio-group label:hover { border-color: var(--sage-mid); background: var(--sage-light); }
+.check-group input[type="checkbox"], .radio-group input[type="radio"] {
+  width: 15px; height: 15px; accent-color: var(--sage); flex-shrink: 0; margin: 0; padding: 0; border: none;
+}
+.check-group label:has(input:checked), .radio-group label:has(input:checked) {
+  border-color: var(--sage);
+  background: var(--sage-light);
+  color: var(--sage-dark);
+  font-weight: 500;
 }
 
-.submit-area {
-  margin-top: 40px;
+.input-prefix { position: relative; }
+.input-prefix .prefix { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--ink-light); pointer-events: none; }
+.input-prefix input { padding-left: 26px; }
+
+.note { background: var(--sage-light); border-left: 3px solid var(--sage); padding: 12px 16px; border-radius: 0 6px 6px 0; font-size: 13px; color: var(--ink-mid); line-height: 1.6; margin-bottom: 20px; }
+.note strong { color: var(--sage-dark); font-weight: 500; }
+
+.submit-area { border-top: 1px solid var(--cream-border); padding-top: 40px; margin-top: 48px; text-align: center; }
+.submit-area p { font-size: 13px; color: var(--ink-light); margin-bottom: 20px; line-height: 1.6; }
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--ink);
+  color: white;
+  border: none;
+  padding: 14px 36px;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+.btn-primary:hover { background: #2c2825; }
+.btn-primary:active { transform: scale(0.98); }
+
+footer { background: var(--ink); color: rgba(250,250,249,0.35); text-align: center; padding: 28px 40px; font-size: 12px; line-height: 1.7; }
+footer a { color: rgba(250,250,249,0.45); text-decoration: none; }
+footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
+
+/* ══════════════════════════════════════
+   THANK YOU PAGE
+══════════════════════════════════════ */
+.thanks-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.thanks-hero {
+  background: linear-gradient(160deg, #1c1917 0%, #2d2926 60%, #1a2e1f 100%);
+  padding: 80px 40px 72px;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.thanks-hero::before {
+  content: '';
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(74,124,89,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.thanks-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -100px; left: -60px;
+  width: 320px; height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(74,124,89,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.thanks-check {
+  width: 72px;
+  height: 72px;
+  background: rgba(74,124,89,0.2);
+  border: 2px solid rgba(111,163,125,0.4);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 28px;
+  position: relative;
+  z-index: 1;
+}
+.thanks-check svg {
+  width: 36px;
+  height: 36px;
+}
+.thanks-hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(28px, 5vw, 44px);
+  color: var(--white);
+  line-height: 1.2;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+.thanks-hero h1 em { font-style: italic; color: var(--sage-mid); }
+.thanks-hero p {
+  font-size: 16px;
+  color: rgba(255,255,255,0.65);
+  max-width: 540px;
+  margin: 0 auto;
+  line-height: 1.8;
+  position: relative;
+  z-index: 1;
+}
+
+.thanks-body {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 56px 40px 64px;
+  flex: 1;
+}
+
+.thanks-card {
+  background: var(--white);
+  border: 1px solid var(--cream-border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+  margin-bottom: 24px;
+}
+.thanks-card-inner {
+  padding: 32px;
+}
+.thanks-card-inner h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  color: var(--ink);
+  margin-bottom: 14px;
+  font-weight: 400;
+}
+.thanks-card-inner p {
+  font-size: 14px;
+  color: var(--ink-mid);
+  line-height: 1.85;
+}
+.thanks-card-inner p + p {
+  margin-top: 12px;
+}
+
+.thanks-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 20px;
+}
+.thanks-step {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--cream-border);
+}
+.thanks-step:last-child { border-bottom: none; padding-bottom: 0; }
+.thanks-step:first-child { padding-top: 0; }
+.thanks-step-num {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--sage-light);
+  border: 1px solid #ccddd3;
+  color: var(--sage-dark);
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.thanks-step-text strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 3px;
+}
+.thanks-step-text span {
+  font-size: 13px;
+  color: var(--ink-light);
+  line-height: 1.6;
+}
+
+.thanks-highlight {
+  background: var(--sage-light);
+  border: 1px solid #ccddd3;
+  border-radius: 12px;
+  padding: 22px 24px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  margin-top: 24px;
+}
+.thanks-highlight svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.thanks-highlight p {
+  font-size: 13px;
+  color: var(--sage-dark);
+  line-height: 1.7;
+}
+.thanks-highlight p strong {
+  font-weight: 500;
+  color: var(--sage-dark);
+}
+
+.thanks-name-callout {
+  background: var(--cream);
+  border-left: 3px solid var(--sage);
+  border-radius: 0 8px 8px 0;
+  padding: 14px 18px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  color: var(--ink-mid);
+  line-height: 1.6;
+  font-style: italic;
+}
+.thanks-name-callout strong {
+  font-style: normal;
+  font-weight: 500;
+  color: var(--sage-dark);
+}
+
+@media (max-width: 600px) {
+  .legal-nav { padding: 16px 20px; }
+  .legal-hero { padding: 40px 24px 40px; }
+  .legal-body { padding: 28px 20px 24px; }
+  .legal-footer { padding: 16px 20px 24px; }
+  .hero-inner { padding: 36px 24px 36px; }
+  .hero-signed-banner { padding: 10px 24px; }
+  .progress-wrap { padding: 12px 24px; }
+  .form-body { padding: 32px 24px 60px; }
+  .field-row, .field-row-3 { grid-template-columns: 1fr; }
+  .hero-meta { gap: 12px; }
+  .sig-row { grid-template-columns: 1fr; }
+  .hero-top { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .thanks-hero { padding: 56px 24px 52px; }
+  .thanks-body { padding: 36px 24px 48px; }
 }
 </style>
 </head>
-
 <body>
 
-<div class="container">
+<!-- ══════════════════════════════════════
+     PAGE 1: LEGAL AGREEMENT
+══════════════════════════════════════ -->
+<div class="page active" id="page-legal">
+<div class="legal-page">
 
-<h1>Client Intake Form</h1>
+  <nav class="legal-nav">
+    <div class="brand-lockup">
+      <img src="logo.png" alt="Neighborly Goods" class="brand-logo">
+      <div>
+        <div class="brand-name">Neighborly Goods and Services</div>
+        <div class="brand-tagline">Home Efficiency Reports</div>
+      </div>
+    </div>
+    <span class="nav-badge">Client Intake</span>
+  </nav>
 
-<form action="https://formspree.io/f/xgopbwdj" method="POST">
-
-  <!-- EMAIL SETTINGS -->
-  <input type="hidden" name="_subject" value="New Intake Submission - Neighborly Goods">
-  <input type="hidden" name="_redirect" value="https://yourusername.github.io/thank-you.html">
-
-  <!-- REQUIRED EMAIL -->
-  <div class="field">
-    <label>Email</label>
-    <input type="email" name="email" required>
+  <div class="legal-hero">
+    <h1>Before we get started,<br>let's be <em>clear with each other.</em></h1>
+    <p>Please read and sign the agreement below. It takes about two minutes and sets honest expectations for what this consultation is — and what it isn't.</p>
   </div>
 
-  <!-- KEEP / ADD YOUR FIELDS BELOW -->
-  <div class="field">
-    <label>Full Name</label>
-    <input type="text" name="full_name" required>
+  <div class="legal-body">
+
+    <div class="agreement-card">
+      <div class="agreement-card-header">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h2>Services Agreement &amp; Scope of Work</h2>
+      </div>
+      <div class="agreement-card-body">
+
+        <div class="agreement-section">
+          <h3>About Neighborly Goods and Services LLC</h3>
+          <p>Neighborly Goods and Services LLC is a home economics business operated by an independent consultant who draws on personal experience, research, and community knowledge to help households identify potential areas of savings, income opportunity, and financial efficiency.</p>
+          <p>This is a neighbor-to-neighbor service — not a financial institution, law firm, accounting practice, or government agency. Your purchase includes a written Home Efficiency Report delivered digitally. Follow-up consultations to discuss your report results are available separately.</p>
+        </div>
+
+        <div class="highlight-box">
+          <p>"Think of this report the way you'd think of a trusted, resourceful friend sitting across the table from you — someone who has done the research, made the mistakes, and found the opportunities, and genuinely wants to share what they know. That's exactly what this is."</p>
+        </div>
+
+        <div class="agreement-section">
+          <h3>What Your Report Includes</h3>
+          <p>Your Home Efficiency Report is a personalized written document designed to raise your awareness of opportunities you may not know exist. Specifically, you may receive information and suggestions related to:</p>
+          <ul class="services-list">
+            <li>Utility programs, rebates, and rate plan optimizations available in your area</li>
+            <li>Grocery savings strategies, coupon stacking, rewards programs, and shopping approaches</li>
+            <li>Credit card rewards and cash-back opportunities suited to your spending habits</li>
+            <li>Potential income opportunities through side businesses, gig economy, or underutilized assets</li>
+            <li>General awareness of tax-advantaged accounts and commonly overlooked deductions</li>
+            <li>Home efficiency improvements and applicable incentive programs</li>
+            <li>Employer benefits and programs that many people never discover or use</li>
+            <li>Budgeting frameworks, savings strategies, and financial organization approaches</li>
+          </ul>
+        </div>
+
+        <div class="agreement-section">
+          <h3>What This Report Does Not Include</h3>
+          <p>It is important that you understand the scope of this service. Your report is a written reference document. Neighborly Goods and Services LLC does <strong>not</strong> provide:</p>
+          <ul class="not-list">
+            <li>Legal advice of any kind — including advice related to divorce, contracts, or liability</li>
+            <li>Tax preparation, tax filing, or certified tax advice (we are not a CPA or enrolled agent)</li>
+            <li>Licensed financial planning, investment advice, or securities recommendations</li>
+            <li>Insurance advice or brokerage services of any kind</li>
+            <li>Medical, psychological, or healthcare guidance</li>
+            <li>Guarantees of savings, income, or any specific financial outcome</li>
+          </ul>
+          <p style="margin-top: 14px;">All information in your report is for <strong>general awareness and educational purposes only.</strong> You are always encouraged to consult a licensed professional — including a CPA, attorney, or Certified Financial Planner — before making significant financial decisions.</p>
+        </div>
+
+        <div class="agreement-section">
+          <h3>Accuracy and Applicability</h3>
+          <p>Recommendations are based on the information you provide and on general knowledge of programs, strategies, and opportunities that exist at the time your report is prepared. Availability of specific programs, rebates, rates, and offers can change. You are responsible for verifying the current availability and terms of any specific recommendation before acting on it.</p>
+          <p>Dollar estimates provided during the consultation are projections intended to illustrate potential opportunity — they are not guarantees of actual savings or income.</p>
+        </div>
+
+        <div class="agreement-section">
+          <h3>Confidentiality</h3>
+          <p>All information you share in this intake form is used solely for the purpose of preparing your personalized Home Efficiency Report. Your information will not be sold, shared with third parties, or used for marketing purposes. Your financial details are treated with the same care and discretion you would expect from any trusted professional relationship.</p>
+        </div>
+
+        <div class="agreement-section">
+          <h3>Your Autonomy</h3>
+          <p>Every recommendation in your report is a suggestion for you to evaluate on your own terms and timeline. You are under no obligation to act on any recommendation. You know your life, your household, and your priorities better than anyone. This consultation is simply a tool to help you see possibilities you may not have considered — what you do with that information is entirely and always up to you.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SIGNATURE BLOCK -->
+    <div class="sig-card">
+      <h2>Your Electronic Signature</h2>
+      <p>By signing below, you confirm that you have read and understood this agreement, and that you understand you are purchasing a written Home Efficiency Report — not an in-person consultation, legal advice, or professional financial services. Follow-up discussion of your report results is available as a separate, optional service.</p>
+
+      <div class="sig-row">
+        <div class="sig-field">
+          <label for="sig-name">Full name</label>
+          <input type="text" id="sig-name" placeholder="Your full name" oninput="checkSigReady()">
+        </div>
+        <div class="sig-field">
+          <label for="sig-email">Email address <span style="font-weight:300;color:var(--ink-xlight);font-size:12px;">(optional)</span></label>
+          <input type="email" id="sig-email" placeholder="your@email.com">
+        </div>
+      </div>
+
+      <div class="sig-canvas-wrap">
+        <label>Signature <span style="font-weight:300;color:var(--ink-xlight);font-size:12px;">— draw with mouse or finger</span></label>
+        <div class="sig-canvas-container">
+          <canvas id="sig-canvas" width="660" height="120"></canvas>
+          <div class="sig-canvas-placeholder"><span>Sign here</span></div>
+        </div>
+        <div class="sig-actions">
+          <button type="button" class="btn-clear" onclick="clearSig()">Clear signature</button>
+          <span id="sig-status" style="font-size:12px;color:var(--sage);display:none;">✓ Signature captured</span>
+        </div>
+      </div>
+
+      <label class="checkbox-agree" id="agree-wrap">
+        <input type="checkbox" id="agree-check" onchange="checkSigReady()">
+        <p>I have read and understood the Consultation Services Agreement above. I acknowledge that <strong>Neighborly Goods and Services LLC</strong> is providing general awareness and educational information — not legal, tax, financial, or professional advice — and that I will consult appropriate licensed professionals before making significant financial decisions.</p>
+      </label>
+
+      <div id="timestamp-display"></div>
+
+      <button class="btn-proceed" id="btn-proceed" onclick="proceedToForm()" disabled>
+        I Agree — Continue to the Intake Form &rarr;
+      </button>
+    </div>
+
   </div>
 
-  <div class="field">
-    <label>Household Size</label>
-    <input type="number" name="household_size">
+  <div class="legal-footer">
+    <strong>Neighborly Goods and Services LLC</strong> &nbsp;·&nbsp; Home Efficiency Reports<br>
+    This agreement is executed electronically. It acknowledges the scope of services: a written Home Efficiency Report. Follow-up consultations are available separately.<br>
+    Questions? Reach out before signing.
   </div>
-
-  <div class="field">
-    <label>Monthly Utility Spend</label>
-    <input type="text" name="utility_spend">
-  </div>
-
-  <div class="field">
-    <label>Main Goals</label>
-    <textarea name="goals"></textarea>
-  </div>
-
-  <!-- SUBMIT -->
-  <div class="submit-area">
-    <p>You’ll hear back within 1–2 business days.</p>
-    <button type="submit">
-      Submit my intake form
-    </button>
-  </div>
-
-</form>
 
 </div>
+</div>
 
+<!-- ══════════════════════════════════════
+     PAGE 2: INTAKE FORM
+══════════════════════════════════════ -->
+<div class="page" id="page-form">
+
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-top">
+        <div class="brand-lockup">
+              <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/wAARCAfQB9ADASIAAhEBAxEB/8QAHQABAAIDAQEBAQAAAAAAAAAAAAcIBQYJBAMCAf/EAAAAAQABAgMEBQYHCA== " alt="Neighborly Goods and Services LLC" class="brand-logo-img">
+          <div>
+            <div class="brand-name" style="font-family:'DM Serif Display',serif;font-size:15px;color:white;line-height:1.2;">Neighborly Goods and Services</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.4);font-weight:300;letter-spacing:0.04em;">Home Efficiency Reports</div>
+          </div>
+        </div>
+        <span class="hero-badge">Intake Form</span>
+      </div>
+      <h1>Let's find the money <em>hiding</em><br>in your household.</h1>
+      <p>Your answers help us identify savings opportunities, income potential, and efficiency gaps — specific to your actual life. Estimates are completely fine.</p>
+      <div class="hero-meta">
+        <div class="hero-meta-item"><span class="dot"></span> 10–15 minutes</div>
+        <div class="hero-meta-item"><span class="dot"></span> All answers confidential</div>
+        <div class="hero-meta-item"><span class="dot"></span> Estimates are fine</div>
+        <div class="hero-meta-item"><span class="dot"></span> No wrong answers</div>
+      </div>
+    </div>
+    <div class="hero-signed-banner" id="signed-banner">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span id="signed-name-display">Agreement signed and acknowledged</span>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <span class="progress-label" id="progress-label">Section 1 of 9</span>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    <span class="progress-pct" id="progress-pct">0%</span>
+  </div>
+
+  <div class="form-body">
+  <form id="intake-form">
+
+    <!-- 1. ABOUT YOU -->
+    <div class="section" id="s1">
+      <div class="section-label">
+        <div class="section-num">1</div>
+        <div class="section-title">About You</div>
+        <div class="section-divider"></div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>First name <span class="optional">(optional)</span></label>
+          <input type="text" name="first_name" placeholder="e.g. Sarah">
+        </div>
+        <div class="field">
+          <label>ZIP code <span class="hint">Used to identify local programs and costs</span></label>
+          <input type="text" name="zip" placeholder="e.g. 55113" maxlength="10">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Household type</label>
+          <select name="household_type">
+            <option value="">Select…</option>
+            <option>Single, no kids</option>
+            <option>Single parent</option>
+            <option>Married / partnered, no kids</option>
+            <option>Married / partnered with kids</option>
+            <option>Multi-generational household</option>
+            <option>Roommates / shared housing</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Number of people in the household</label>
+          <input type="number" name="household_size" min="1" max="20" placeholder="e.g. 4">
+        </div>
+      </div>
+      <div class="field">
+        <label>Ages of any children in the home <span class="optional">(optional)</span> <span class="hint">e.g. 3</span></label>
+        <input type="text" name="children_ages" placeholder="e.g. 3">
+      </div>
+      <div class="field">
+        <label>Are you currently going through any major life transitions?</label>
+        <div class="check-group">
+          <label><input type="checkbox" name="transition" value="divorce"> Divorce / separation</label>
+          <label><input type="checkbox" name="transition" value="new_job"> New job / income change</label>
+          <label><input type="checkbox" name="transition" value="new_home"> Recent home purchase</label>
+          <label><input type="checkbox" name="transition" value="new_baby"> New baby / growing family</label>
+          <label><input type="checkbox" name="transition" value="retirement"> Approaching retirement</label>
+          <label><input type="checkbox" name="transition" value="loss"> Loss of partner / income earner</label>
+          <label><input type="checkbox" name="transition" value="none"> None of the above</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. INCOME -->
+    <div class="section" id="s2">
+      <div class="section-label">
+        <div class="section-num">2</div>
+        <div class="section-title">Income &amp; Finances</div>
+        <div class="section-divider"></div>
+      </div>
+      <div class="note"><strong>Estimates are completely fine.</strong> These help us identify tax strategies, savings opportunities, and income ideas relevant to your situation.</div>
+      <div class="field-row">
+        <div class="field">
+          <label>Approximate gross annual household income</label>
+          <div class="input-prefix"><span class="prefix">$</span><input type="number" name="gross_income" placeholder="e.g. 85000"></div>
+        </div>
+        <div class="field">
+          <label>Approximate take-home pay per paycheck</label>
+          <div class="input-prefix"><span class="prefix">$</span><input type="number" name="take_home" placeholder="e.g. 2400"></div>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Pay frequency</label>
+          <select name="pay_frequency">
+            <option value="">Select…</option>
+            <option>Weekly</option>
+            <option>Every two weeks (bi-weekly)</option>
+            <option>Twice a month (semi-monthly)</option>
+            <option>Monthly</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Other income sources</label>
+          <select name="other_income">
+            <option value="">Select…</option>
+            <option>No, just my primary job</option>
+            <option>Yes — side gig / gig economy</option>
+            <option>Yes — small business / LLC</option>
+            <option>Yes — rental income</option>
+            <option>Yes — investments / dividends</option>
+            <option>Yes — multiple of the above</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Describe any side income or self-employment <span class="optional">(optional)</span> <span class="hint">What do you sell or do? Rough monthly or annual earnings?</span></label>
+        <textarea name="side_income_desc" placeholder="e.g. I do occasional DoorDash at $150/month"></textarea>
+      </div>
+      <div class="field">
+        <label>Dedicated emergency fund status</label>
+        <div class="radio-group">
+          <label><input type="radio" name="emergency_fund" value="none"> No emergency fund</label>
+          <label><input type="radio" name="emergency_fund" value="under1"> Less than 1 month</label>
+          <label><input type="radio" name="emergency_fund" value="1to2"> 1–2 months</label>
+          <label><input type="radio" name="emergency_fund" value="3plus"> 3+ months</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Do you use a budget app or track your spending? <span class="hint">e.g. YNAB, Mint, spreadsheet, envelope method, nothing</span></label>
+        <input type="text" name="budgeting_tool" placeholder="e.g. YNAB, spreadsheet, nothing currently">
+      </div>
+      <div class="field">
+        <label>Approximate total non-mortgage debt <span class="optional">(optional)</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="total_debt" value="none"> No debt</label>
+          <label><input type="radio" name="total_debt" value="under5k"> Under $5k</label>
+          <label><input type="radio" name="total_debt" value="5to20k"> $5k–$20k</label>
+          <label><input type="radio" name="total_debt" value="20to50k"> $20k–$50k</label>
+          <label><input type="radio" name="total_debt" value="50kplus"> $50k+</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. HOME -->
+    <div class="section" id="s3">
+      <div class="section-label">
+        <div class="section-num">3</div>
+        <div class="section-title">Your Home</div>
+        <div class="section-divider"></div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Home ownership status</label>
+          <select name="ownership">
+            <option value="">Select…</option>
+            <option>I own my home</option>
+            <option>I rent</option>
+            <option>I live with family / no housing payment</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Monthly mortgage or rent payment</label>
+          <div class="input-prefix"><span class="prefix">$</span><input type="number" name="housing_payment" placeholder="e.g. 1285"></div>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Approximate square footage</label>
+          <select name="sq_ft">
+            <option value="">Select…</option>
+            <option>Under 800 sq ft</option>
+            <option>800–1,200 sq ft</option>
+            <option>1,200–1,800 sq ft</option>
+            <option>1,800–2,500 sq ft</option>
+            <option>Over 2,500 sq ft</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Approximate year home was built</label>
+          <select name="home_age">
+            <option value="">Select…</option>
+            <option>Before 1950</option>
+            <option>1950–1969</option>
+            <option>1970–1989</option>
+            <option>1990–2005</option>
+            <option>2006–2015</option>
+            <option>2016 or newer</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Renovation / weatherization history</label>
+        <div class="radio-group">
+          <label><input type="radio" name="renovation" value="full"> Full gut renovation</label>
+          <label><input type="radio" name="renovation" value="partial"> Partial updates</label>
+          <label><input type="radio" name="renovation" value="no"> No major updates</label>
+          <label><input type="radio" name="renovation" value="unknown"> Not sure</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Heating &amp; cooling system <span class="hint">Select all that apply</span></label>
+        <div class="check-group">
+          <label><input type="checkbox" name="hvac" value="gas_furnace"> Gas forced-air furnace</label>
+          <label><input type="checkbox" name="hvac" value="electric_heat"> Electric heat / baseboard</label>
+          <label><input type="checkbox" name="hvac" value="heat_pump"> Heat pump</label>
+          <label><input type="checkbox" name="hvac" value="boiler"> Boiler / radiator</label>
+          <label><input type="checkbox" name="hvac" value="central_ac"> Central A/C</label>
+          <label><input type="checkbox" name="hvac" value="window_ac"> Window A/C units</label>
+          <label><input type="checkbox" name="hvac" value="unknown"> Not sure</label>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Thermostat type</label>
+          <select name="thermostat">
+            <option value="">Select…</option>
+            <option>Smart thermostat (Nest, Ecobee, etc.)</option>
+            <option>Programmable thermostat</option>
+            <option>Manual thermostat</option>
+            <option>Not sure</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Water heater type</label>
+          <select name="water_heater">
+            <option value="">Select…</option>
+            <option>Standard gas tank</option>
+            <option>Standard electric tank</option>
+            <option>Tankless / on-demand (gas)</option>
+            <option>Tankless / on-demand (electric)</option>
+            <option>Heat pump water heater</option>
+            <option>Not sure</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Underutilized spaces <span class="hint">Select any not currently generating value</span></label>
+        <div class="check-group">
+          <label><input type="checkbox" name="space" value="basement"> Basement</label>
+          <label><input type="checkbox" name="space" value="garage"> Garage</label>
+          <label><input type="checkbox" name="space" value="extra_bedroom"> Extra bedroom</label>
+          <label><input type="checkbox" name="space" value="attic"> Attic</label>
+          <label><input type="checkbox" name="space" value="large_yard"> Large yard</label>
+          <label><input type="checkbox" name="space" value="driveway"> Driveway / parking</label>
+          <label><input type="checkbox" name="space" value="none"> None</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Homeowners / renters insurance <span class="hint">Provider and monthly cost</span></label>
+        <input type="text" name="home_insurance" placeholder="e.g. Progressive, $208/mo">
+      </div>
+    </div>
+
+    <!-- 4. UTILITIES -->
+    <div class="section" id="s4">
+      <div class="section-label">
+        <div class="section-num">4</div>
+        <div class="section-title">Utilities &amp; Energy</div>
+        <div class="section-divider"></div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Average monthly electric bill</label>
+          <div class="input-prefix"><span class="prefix">$</span><input type="number" name="electric_bill" placeholder="e.g. 95"></div>
+        </div>
+        <div class="field">
+          <label>Average monthly gas bill <span class="optional">(if applicable)</span></label>
+          <div class="input-prefix"><span class="prefix">$</span><input type="number" name="gas_bill" placeholder="e.g. 160"></div>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Electric utility provider</label>
+          <input type="text" name="electric_provider" placeholder="e.g. Xcel Energy, ComEd, PG&E">
+        </div>
+        <div class="field">
+          <label>Current utility rate plan</label>
+          <select name="utility_plan">
+            <option value="">Select…</option>
+            <option>Standard / default plan</option>
+            <option>Time-of-Use / Time-of-Day plan</option>
+            <option>Net metering (solar)</option>
+            <option>Budget billing / averaged billing</option>
+            <option>Not sure</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Solar &amp; alternative energy <span class="hint">Select all that apply</span></label>
+        <div class="check-group">
+          <label><input type="checkbox" name="solar" value="rooftop"> Rooftop solar panels</label>
+          <label><input type="checkbox" name="solar" value="portable_panels"> Portable solar panels</label>
+          <label><input type="checkbox" name="solar" value="generator"> Solar generator / power station</label>
+          <label><input type="checkbox" name="solar" value="battery"> Home battery (Powerwall, etc.)</label>
+          <label><input type="checkbox" name="solar" value="none"> None</label>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Internet provider &amp; monthly cost</label>
+          <input type="text" name="internet" placeholder="e.g. Quantum Fiber, $45/mo">
+        </div>
+        <div class="field">
+          <label>Cell phone plan &amp; monthly cost</label>
+          <input type="text" name="phone" placeholder="e.g. Mint Mobile, $20/mo — 1 line">
+        </div>
+      </div>
+      <div class="field">
+        <label>Other utilities <span class="hint">Water/sewer, trash, security system — provider and cost</span></label>
+        <textarea name="other_utilities" placeholder="e.g. City water/sewer $60/mo, ADT $35/mo, trash $28/mo"></textarea>
+      </div>
+    </div>
+
+    <!-- 5. TRANSPORTATION -->
+    <div class="section" id="s5">
+      <div class="section-label">
+        <div class="section-num">5</div>
+        <div class="section-title">Transportation</div>
+        <div class="section-divider"></div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Number of vehicles</label>
+          <select name="num_vehicles">
+            <option value="">Select…</option>
+            <option>0 — no car</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3 or more</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Car insurance — provider &amp; total monthly cost</label>
+          <input type="text" name="car_insurance" placeholder="e.g. Progressive, $57/mo">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Estimated annual miles driven</label>
+          <select name="annual_miles">
+            <option value="">Select…</option>
+            <option>Under 5,000</option>
+            <option>5,000–10,000</option>
+            <option>10,000–15,000</option>
+            <option>15,000–20,000</option>
+            <option>Over 20,000</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>One-way commute distance</label>
+          <select name="commute">
+            <option value="">Select…</option>
+            <option>I work fully from home</option>
+            <option>Under 5 miles</option>
+            <option>5–15 miles</option>
+            <option>15–30 miles</option>
+            <option>Over 30 miles</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Days per week in an office</label>
+          <div class="radio-group">
+            <label><input type="radio" name="office_days" value="0"> 0 — fully remote</label>
+            <label><input type="radio" name="office_days" value="1to2"> 1–2 days</label>
+            <label><input type="radio" name="office_days" value="3to4"> 3–4 days</label>
+            <label><input type="radio" name="office_days" value="5"> 5 days</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Do you track mileage for tax / reimbursement?</label>
+          <div class="radio-group">
+            <label><input type="radio" name="mileage_tracking" value="yes_full"> Yes, fully</label>
+            <label><input type="radio" name="mileage_tracking" value="yes_partial"> Partially</label>
+            <label><input type="radio" name="mileage_tracking" value="no"> No</label>
+            <label><input type="radio" name="mileage_tracking" value="na"> N/A</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. GROCERIES -->
+    <div class="section" id="s6">
+      <div class="section-label">
+        <div class="section-num">6</div>
+        <div class="section-title">Groceries &amp; Shopping</div>
+        <div class="section-divider"></div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Approximate monthly grocery spend</label>
+          <select name="grocery_spend">
+            <option value="">Select…</option>
+            <option>Under $300</option>
+            <option>$300–$500</option>
+            <option>$500–$700</option>
+            <option>$700–$1,000</option>
+            <option>Over $1,000</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>How often does your household eat out or order delivery?</label>
+          <select name="eating_out">
+            <option value="">Select…</option>
+            <option>Rarely — we cook almost everything</option>
+            <option>1–2 times per week</option>
+            <option>3–4 times per week</option>
+            <option>5+ times per week</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Where do you primarily grocery shop? <span class="hint">Select all that apply</span></label>
+        <div class="check-group">
+          <label><input type="checkbox" name="grocery_stores" value="costco"> Costco</label>
+          <label><input type="checkbox" name="grocery_stores" value="sams"> Sam's Club</label>
+          <label><input type="checkbox" name="grocery_stores" value="walmart"> Walmart / Walmart+</label>
+          <label><input type="checkbox" name="grocery_stores" value="target"> Target</label>
+          <label><input type="checkbox" name="grocery_stores" value="aldi"> ALDI</label>
+          <label><input type="checkbox" name="grocery_stores" value="trader_joes"> Trader Joe's</label>
+          <label><input type="checkbox" name="grocery_stores" value="whole_foods"> Whole Foods</label>
+          <label><input type="checkbox" name="grocery_stores" value="kroger"> Kroger / regional grocery</label>
+          <label><input type="checkbox" name="grocery_stores" value="ethnic"> Ethnic / specialty grocery</label>
+          <label><input type="checkbox" name="grocery_stores" value="local"> Local co-op / farm market</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Current savings app or coupon usage <span class="hint">Select all that apply</span></label>
+        <div class="check-group">
+          <label><input type="checkbox" name="coupon_apps" value="ibotta"> Ibotta</label>
+          <label><input type="checkbox" name="coupon_apps" value="fetch"> Fetch Rewards</label>
+          <label><input type="checkbox" name="coupon_apps" value="rakuten"> Rakuten</label>
+          <label><input type="checkbox" name="coupon_apps" value="honey"> Honey / Capital One Shopping</label>
+          <label><input type="checkbox" name="coupon_apps" value="flipp"> Flipp</label>
+          <label><input type="checkbox" name="coupon_apps" value="store_apps"> Store loyalty apps (Target Circle, etc.)</label>
+          <label><input type="checkbox" name="coupon_apps" value="clipcoupons"> Clip coupons (paper or digital)</label>
+          <label><input type="checkbox" name="coupon_apps" value="none"> None currently</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Food storage or production <span class="hint">Select all that apply</span></label>
+        <div class="check-group">
+          <label><input type="checkbox" name="food_storage" value="deep_freezer"> Deep / chest freezer</label>
+          <label><input type="checkbox" name="food_storage" value="pantry"> Dedicated pantry / food storage</label>
+          <label><input type="checkbox" name="food_storage" value="meal_prep"> Regular meal planning routine</label>
+          <label><input type="checkbox" name="food_storage" value="garden"> Vegetable garden</label>
+          <label><input type="checkbox" name="food_storage" value="chickens"> Backyard chickens / livestock</label>
+          <label><input type="checkbox" name="food_storage" value="preserve"> Home preserving / canning</label>
+          <label><input type="checkbox" name="food_storage" value="delivery"> Grocery delivery subscription</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Warehouse club membership</label>
+        <div class="radio-group">
+          <label><input type="radio" name="warehouse_membership" value="costco_exec"> Costco Executive</label>
+          <label><input type="radio" name="warehouse_membership" value="costco_gold"> Costco Gold Star</label>
+          <label><input type="radio" name="warehouse_membership" value="sams"> Sam's Club</label>
+          <label><input type="radio" name="warehouse_membership" value="none"> No membership</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. CREDIT & BANKING -->
+    <div class="section" id="s7">
+      <div class="section-label">
+        <div class="section-num">7</div>
+        <div class="section-title">Credit Cards &amp; Banking</div>
+        <div class="section-divider"></div>
+      </div>
+      <div class="field">
+        <label>Approximate credit score range</label>
+        <div class="radio-group">
+          <label><input type="radio" name="credit_score" value="under600"> Under 600</label>
+          <label><input type="radio" name="credit_score" value="600to649"> 600–649</label>
+          <label><input type="radio" name="credit_score" value="650to699"> 650–699</label>
+          <label><input type="radio" name="credit_score" value="700to749"> 700–749</label>
+          <label><input type="radio" name="credit_score" value="750to799"> 750–799</label>
+          <label><input type="radio" name="credit_score" value="800plus"> 800+</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Credit card rewards focus <span class="hint">Select all that apply</span></label>
+        <div class="check-group">
+          <label><input type="checkbox" name="cc_rewards" value="cash_back"> Cash back</label>
+          <label><input type="checkbox" name="cc_rewards" value="travel"> Travel points / miles</label>
+          <label><input type="checkbox" name="cc_rewards" value="churning"> Sign-on bonuses (churning)</label>
+          <label><input type="checkbox" name="cc_rewards" value="store"> Store-specific rewards</label>
+          <label><input type="checkbox" name="cc_rewards" value="none"> Not actively optimizing</label>
+          <label><input type="checkbox" name="cc_rewards" value="no_cards"> I don't use credit cards</label>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Number of credit cards currently open</label>
+          <select name="num_cards">
+            <option value="">Select…</option>
+            <option>0</option>
+            <option>1–2</option>
+            <option>3–5</option>
+            <option>6–10</option>
+            <option>More than 10</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Do you carry a balance month to month?</label>
+          <select name="cc_balance">
+            <option value="">Select…</option>
+            <option>No — I pay in full each month</option>
+            <option>Sometimes</option>
+            <option>Yes, regularly</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Bank accounts you currently have <span class="hint">Select all that apply</span></label>
+        <div class="check-group">
+          <label><input type="checkbox" name="bank_accounts" value="checking"> Checking account</label>
+          <label><input type="checkbox" name="bank_accounts" value="savings"> Savings account</label>
+          <label><input type="checkbox" name="bank_accounts" value="hysa"> High-yield savings (HYSA)</label>
+          <label><input type="checkbox" name="bank_accounts" value="separate_savings"> Separate savings buckets</label>
+          <label><input type="checkbox" name="bank_accounts" value="cash"> I primarily use cash</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. RETIREMENT & BENEFITS -->
+    <div class="section" id="s8">
+      <div class="section-label">
+        <div class="section-num">8</div>
+        <div class="section-title">Retirement, Benefits &amp; Taxes</div>
+        <div class="section-divider"></div>
+      </div>
+      <div class="field">
+        <label>Retirement accounts you currently contribute to <span class="hint">Select all that apply</span></label>
+        <div class="check-group">
+          <label><input type="checkbox" name="retirement" value="401k"> 401(k) or 403(b)</label>
+          <label><input type="checkbox" name="retirement" value="roth_ira"> Roth IRA</label>
+          <label><input type="checkbox" name="retirement" value="trad_ira"> Traditional IRA</label>
+          <label><input type="checkbox" name="retirement" value="sep_ira"> SEP-IRA or Solo 401k</label>
+          <label><input type="checkbox" name="retirement" value="esop"> ESOP / employer stock</label>
+          <label><input type="checkbox" name="retirement" value="pension"> Pension</label>
+          <label><input type="checkbox" name="retirement" value="none"> Not currently contributing</label>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>401k contribution rate <span class="optional">(if applicable)</span></label>
+          <input type="text" name="k401_pct" placeholder="e.g. 3% match only, 10%, not sure">
+        </div>
+        <div class="field">
+          <label>Approximate total retirement savings</label>
+          <select name="total_retirement">
+            <option value="">Select…</option>
+            <option>Under $25k</option>
+            <option>$25k–$75k</option>
+            <option>$75k–$150k</option>
+            <option>$150k–$300k</option>
+            <option>$300k–$500k</option>
+            <option>Over $500k</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Tax-advantaged accounts in use <span class="hint">Select all that apply</span></label>
+        <div class="check-group">
+          <label><input type="checkbox" name="tax_accounts" value="hsa"> HSA (Health Savings Account)</label>
+          <label><input type="checkbox" name="tax_accounts" value="fsa_health"> FSA — Health</label>
+          <label><input type="checkbox" name="tax_accounts" value="fsa_dependent"> FSA — Dependent Care</label>
+          <label><input type="checkbox" name="tax_accounts" value="529"> 529 College Savings Plan</label>
+          <label><input type="checkbox" name="tax_accounts" value="kids_roth"> Roth IRA for children</label>
+          <label><input type="checkbox" name="tax_accounts" value="none"> None</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>How do you file your taxes?</label>
+        <div class="radio-group">
+          <label><input type="radio" name="tax_filing" value="diy"> DIY software (TurboTax, FreeTaxUSA, etc.)</label>
+          <label><input type="radio" name="tax_filing" value="cpa"> CPA or tax professional</label>
+          <label><input type="radio" name="tax_filing" value="freefile"> Free File / IRS Direct File</label>
+          <label><input type="radio" name="tax_filing" value="preparer"> In-store tax prep (H&R Block, etc.)</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Tax strategies currently in use <span class="hint">Select all that apply</span></label>
+        <div class="check-group">
+          <label><input type="checkbox" name="tax_strategies" value="home_office"> Home office deduction</label>
+          <label><input type="checkbox" name="tax_strategies" value="mileage"> Business mileage deduction</label>
+          <label><input type="checkbox" name="tax_strategies" value="llc_expenses"> LLC / SE expense deductions</label>
+          <label><input type="checkbox" name="tax_strategies" value="itemize"> Itemizing deductions</label>
+          <label><input type="checkbox" name="tax_strategies" value="childtax"> Child tax credit</label>
+          <label><input type="checkbox" name="tax_strategies" value="none"> Not sure / none</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Employer benefits you have access to <span class="hint">Select all that apply</span></label>
+        <div class="check-group">
+          <label><input type="checkbox" name="emp_benefits" value="health"> Health insurance</label>
+          <label><input type="checkbox" name="emp_benefits" value="dental"> Dental / vision</label>
+          <label><input type="checkbox" name="emp_benefits" value="eap"> EAP</label>
+          <label><input type="checkbox" name="emp_benefits" value="legal"> Legal plan</label>
+          <label><input type="checkbox" name="emp_benefits" value="commuter"> Commuter / transit benefits</label>
+          <label><input type="checkbox" name="emp_benefits" value="tuition"> Tuition assistance</label>
+          <label><input type="checkbox" name="emp_benefits" value="discounts"> Employee discount marketplace</label>
+          <label><input type="checkbox" name="emp_benefits" value="unknown"> I don't fully know my benefits</label>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Monthly health insurance premium (your share)</label>
+          <div class="input-prefix"><span class="prefix">$</span><input type="number" name="health_premium" placeholder="e.g. 150"></div>
+        </div>
+        <div class="field">
+          <label>Monthly childcare / daycare costs <span class="optional">(if applicable)</span></label>
+          <div class="input-prefix"><span class="prefix">$</span><input type="number" name="childcare" placeholder="e.g. 1545"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. LIFESTYLE & GOALS -->
+    <div class="section" id="s9">
+      <div class="section-label">
+        <div class="section-num">9</div>
+        <div class="section-title">Lifestyle, Goals &amp; Anything Else</div>
+        <div class="section-divider"></div>
+      </div>
+      <div class="field">
+        <label>Paid subscriptions <span class="hint">Select all that apply</span></label>
+        <div class="check-group">
+          <label><input type="checkbox" name="subscriptions" value="netflix"> Netflix</label>
+          <label><input type="checkbox" name="subscriptions" value="hulu"> Hulu</label>
+          <label><input type="checkbox" name="subscriptions" value="disney"> Disney+</label>
+          <label><input type="checkbox" name="subscriptions" value="hbo"> Max / HBO</label>
+          <label><input type="checkbox" name="subscriptions" value="apple_tv"> Apple TV+</label>
+          <label><input type="checkbox" name="subscriptions" value="spotify"> Spotify / Apple Music</label>
+          <label><input type="checkbox" name="subscriptions" value="amazon"> Amazon Prime</label>
+          <label><input type="checkbox" name="subscriptions" value="gym"> Gym membership</label>
+          <label><input type="checkbox" name="subscriptions" value="meal_kit"> Meal kit service</label>
+          <label><input type="checkbox" name="subscriptions" value="clothing"> Clothing subscription</label>
+          <label><input type="checkbox" name="subscriptions" value="other"> Other subscriptions</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Local support network strength</label>
+        <div class="radio-group">
+          <label><input type="radio" name="support_network" value="strong"> Strong and organized</label>
+          <label><input type="radio" name="support_network" value="some"> Some, but not organized</label>
+          <label><input type="radio" name="support_network" value="minimal"> Minimal — mostly on my own</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Preparedness / food stores</label>
+        <div class="radio-group">
+          <label><input type="radio" name="prepper" value="yes_active"> Actively building stores</label>
+          <label><input type="radio" name="prepper" value="yes_basic"> Basic preparedness (30+ days)</label>
+          <label><input type="radio" name="prepper" value="some"> Some extra pantry goods</label>
+          <label><input type="radio" name="prepper" value="no"> Not really</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Top financial priorities right now <span class="hint">Select up to 3</span></label>
+        <div class="check-group">
+          <label><input type="checkbox" name="priorities" value="emergency_fund"> Build emergency fund</label>
+          <label><input type="checkbox" name="priorities" value="debt"> Pay off debt</label>
+          <label><input type="checkbox" name="priorities" value="lower_bills"> Lower monthly bills</label>
+          <label><input type="checkbox" name="priorities" value="earn_more"> Earn more income</label>
+          <label><input type="checkbox" name="priorities" value="retirement"> Grow retirement savings</label>
+          <label><input type="checkbox" name="priorities" value="kids_future"> Set kids up financially</label>
+          <label><input type="checkbox" name="priorities" value="home_improvement"> Improve my home</label>
+          <label><input type="checkbox" name="priorities" value="stability"> Get more financially stable</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Is there anything else about your financial life or home setup that would be useful to know?</label>
+        <textarea name="anything_else" rows="4" placeholder="e.g. I just started a side business, I help support elderly parents, I have significant medical expenses, I have pets with high costs, I have an unusual housing situation…"></textarea>
+      </div>
+      <div class="field">
+        <label>What is the ONE thing you most want to get out of this consultation?</label>
+        <textarea name="main_goal" rows="3" placeholder="e.g. I want to know if I'm leaving money on the table. / I want to reduce my monthly bills by $200. / I want to know if my side business is worth it."></textarea>
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="submit-area">
+      <p>When you click below, your intake form will be submitted to your report advisor. Your personalized Home Efficiency Report will be delivered to you digitally within 1–2 business days.</p>
+      <button type="button" class="btn-primary" onclick="submitForm()">&#10003;&nbsp; Submit My Intake Form</button>
+    </div>
+
+  </form>
+  </div><!-- /form-body -->
+
+  <footer>
+    <strong>Neighborly Goods and Services LLC</strong> &nbsp;·&nbsp; Home Efficiency Reports<br>
+    Your report is for informational awareness only. Not legal, tax, or financial advice. &nbsp;·&nbsp; Follow-up consultations available separately.<br>
+    Questions? Contact Neighborly Goods and Services before completing this form.
+  </footer>
+
+</div><!-- /page-form -->
+
+<!-- ══════════════════════════════════════
+     PAGE 3: THANK YOU
+══════════════════════════════════════ -->
+<div class="page" id="page-thanks">
+<div class="thanks-page">
+
+  <nav class="legal-nav">
+    <div class="brand-lockup">
+      <img src="logo.png" alt="Neighborly Goods" class="brand-logo">
+      <div>
+        <div class="brand-name">Neighborly Goods and Services</div>
+        <div class="brand-tagline">Home Efficiency Reports</div>
+      </div>
+    </div>
+    <span class="nav-badge">Submitted</span>
+  </nav>
+
+  <div class="thanks-hero">
+    <div class="thanks-check">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 13l4 4L19 7" stroke="#6fa37d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h1>You're all set.<br><em>Thank you.</em></h1>
+    <p>Your intake form has been received. We've got everything we need to get started on your personalized Home Efficiency Report.</p>
+  </div>
+
+  <div class="thanks-body">
+
+    <div id="thanks-name-note" class="thanks-name-callout" style="display:none;">
+      <strong id="thanks-name-text"></strong> — we appreciate you taking the time to share the details of your household with us. The more you gave us to work with, the more useful your report will be.
+    </div>
+
+    <div class="thanks-card">
+      <div class="thanks-card-inner">
+        <h2>What happens next</h2>
+        <div class="thanks-timeline">
+          <div class="thanks-step">
+            <div class="thanks-step-num">1</div>
+            <div class="thanks-step-text">
+              <strong>Your form is in our hands</strong>
+              <span>We've received your intake answers and your advisor will begin reviewing your household profile.</span>
+            </div>
+          </div>
+          <div class="thanks-step">
+            <div class="thanks-step-num">2</div>
+            <div class="thanks-step-text">
+              <strong>Your report is prepared</strong>
+              <span>We'll research the programs, rates, strategies, and opportunities specific to your ZIP code, income level, and situation.</span>
+            </div>
+          </div>
+          <div class="thanks-step">
+            <div class="thanks-step-num">3</div>
+            <div class="thanks-step-text">
+              <strong>Delivery within 1–2 business days</strong>
+              <span>Your personalized Home Efficiency Report will be delivered to you digitally. Keep an eye out — it's worth the read.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="thanks-highlight">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#4a7c59" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <p><strong>Want to talk through your report when it arrives?</strong> Follow-up consultations to review your results in depth are available as a separate service. Just reach out when your report lands — we're happy to walk through it with you.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="thanks-card">
+      <div class="thanks-card-inner">
+        <h2>A note from Neighborly Goods</h2>
+        <p>This is neighbor-to-neighbor work — the kind where someone who's done the research and made the mistakes sits down and shares what they know, because a rising tide lifts all boats.</p>
+        <p>We take your trust seriously. Everything you shared stays confidential and is used only to prepare your report. We're looking forward to finding the opportunities hiding in your household.</p>
+        <p style="margin-top: 18px; font-size: 13px; color: var(--ink-light);">— Neighborly Goods and Services LLC</p>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <strong>Neighborly Goods and Services LLC</strong> &nbsp;·&nbsp; Home Efficiency Reports<br>
+    Your report is for informational awareness only. Not legal, tax, or financial advice. &nbsp;·&nbsp; Follow-up consultations available separately.
+  </footer>
+
+</div>
+</div><!-- /page-thanks -->
+
+<script>
+// ── SIGNATURE CANVAS ──────────────────────────────────────────────────────
+const canvas = document.getElementById('sig-canvas');
+const ctx = canvas.getContext('2d');
+let drawing = false;
+let hasSig = false;
+
+function getPos(e) {
+  const r = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / r.width;
+  const scaleY = canvas.height / r.height;
+  const src = e.touches ? e.touches[0] : e;
+  return { x: (src.clientX - r.left) * scaleX, y: (src.clientY - r.top) * scaleY };
+}
+
+ctx.strokeStyle = '#1c1917';
+ctx.lineWidth = 2;
+ctx.lineCap = 'round';
+ctx.lineJoin = 'round';
+
+canvas.addEventListener('mousedown', e => { drawing = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); });
+canvas.addEventListener('mousemove', e => { if (!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); markSigned(); });
+canvas.addEventListener('mouseup', () => drawing = false);
+canvas.addEventListener('mouseleave', () => drawing = false);
+canvas.addEventListener('touchstart', e => { e.preventDefault(); drawing = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); }, { passive: false });
+canvas.addEventListener('touchmove', e => { e.preventDefault(); if (!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); markSigned(); }, { passive: false });
+canvas.addEventListener('touchend', () => drawing = false);
+
+function markSigned() {
+  if (!hasSig) {
+    hasSig = true;
+    canvas.classList.add('signed');
+    document.getElementById('sig-status').style.display = 'inline';
+    checkSigReady();
+  }
+}
+
+function clearSig() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  hasSig = false;
+  canvas.classList.remove('signed');
+  document.getElementById('sig-status').style.display = 'none';
+  checkSigReady();
+}
+
+function checkSigReady() {
+  const name = document.getElementById('sig-name').value.trim();
+  const agreed = document.getElementById('agree-check').checked;
+  const ready = name.length > 1 && agreed && hasSig;
+  document.getElementById('btn-proceed').disabled = !ready;
+  if (agreed) {
+    const now = new Date();
+    document.getElementById('timestamp-display').textContent =
+      'Agreement timestamp: ' + now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) +
+      ' at ' + now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+  }
+}
+
+function proceedToForm() {
+  const name = document.getElementById('sig-name').value.trim();
+  document.getElementById('signed-name-display').textContent =
+    'Agreement signed by ' + name + ' — ' + new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  document.getElementById('page-legal').classList.remove('active');
+  document.getElementById('page-form').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(updateProgress, 100);
+}
+
+// ── PROGRESS ──────────────────────────────────────────────────────────────
+const sections = document.querySelectorAll('.section');
+const totalSections = sections.length;
+
+function updateProgress() {
+  let filled = 0;
+  sections.forEach(sec => {
+    const inputs = sec.querySelectorAll('input, select, textarea');
+    let has = false;
+    inputs.forEach(inp => {
+      if ((inp.type === 'checkbox' || inp.type === 'radio') && inp.checked) has = true;
+      else if (inp.value && inp.value.trim()) has = true;
+    });
+    if (has) filled++;
+  });
+  const pct = Math.round((filled / totalSections) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent = pct + '%';
+  document.getElementById('progress-label').textContent = 'Section ' + Math.min(filled + 1, totalSections) + ' of ' + totalSections;
+}
+
+document.getElementById('intake-form').addEventListener('change', updateProgress);
+document.getElementById('intake-form').addEventListener('input', updateProgress);
+
+// ── SCROLL ANIMATIONS ─────────────────────────────────────────────────────
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.06 });
+sections.forEach(s => obs.observe(s));
+
+// ── SUBMIT → THANK YOU PAGE ───────────────────────────────────────────────
+function submitForm() {
+  // Pull the client's first name to personalize the thank-you page
+  const firstName = document.querySelector('[name="first_name"]').value.trim();
+  const sigName   = document.getElementById('sig-name').value.trim();
+  const displayName = firstName || sigName || '';
+
+  if (displayName) {
+    const note = document.getElementById('thanks-name-note');
+    document.getElementById('thanks-name-text').textContent = displayName;
+    note.style.display = 'block';
+  }
+
+  // Switch pages
+  document.getElementById('page-form').classList.remove('active');
+  document.getElementById('page-thanks').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+updateProgress();
+</script>
 </body>
 </html>
