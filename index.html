@@ -1091,18 +1091,12 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
     <span class="progress-pct" id="progress-pct">0%</span>
   </div>
 
-  <!-- Hidden iframe: form posts into this so the browser never navigates away -->
-  <iframe name="formspree-sink" id="formspree-sink" style="display:none;" aria-hidden="true"></iframe>
-
   <div class="form-body">
-  <form id="intake-form"
-        action="https://formspree.io/f/xgopbwdj"
-        method="POST"
-        target="formspree-sink">
+  <form id="intake-form" action="https://formspree.io/f/xgopbwdj" method="POST">
 
     <!-- Hidden fields sent to Formspree -->
     <input type="hidden" name="_subject" value="New Home Efficiency Report Intake — Neighborly Goods and Services">
-    <input type="hidden" name="claude_prompt" id="claude_prompt_field" value="">
+    <input type="hidden" name="_replyto" value="neighborlygoodsandservices@gmail.com">
 
     <!-- 1. ABOUT YOU -->
     <div class="section" id="s1">
@@ -2127,24 +2121,104 @@ function submitForm() {
   btn.disabled = true;
   btn.innerHTML = '&#8987;&nbsp; Submitting…';
 
-  // Build and inject the Claude-ready prompt into the hidden field
-  document.getElementById('claude_prompt_field').value = buildClaudePrompt();
-
   // Grab display name for thank-you page
   const firstName = document.querySelector('[name="first_name"]').value.trim();
   const sigName   = document.getElementById('sig-name').value.trim();
   const displayName = firstName || sigName || '';
 
-  // Submit the form natively into the hidden iframe (no CORS, no fetch)
-  document.getElementById('intake-form').submit();
+  // Build form data manually as URL-encoded string (most reliable for Formspree)
+  const fields = {
+    '_subject': 'New Home Efficiency Report Intake — Neighborly Goods and Services',
+    'Signed By': sigName,
+    'Contact Email': document.getElementById('sig-email').value.trim(),
+    '1 - First Name': getVal('field_first_name'),
+    '1 - ZIP Code': getVal('field_zip'),
+    '1 - Household Type': getSelect('field_household_type'),
+    '1 - Household Size': getVal('field_household_size'),
+    '1 - Children Ages': getVal('field_children_ages'),
+    '1 - Life Transitions': getChecked('transition'),
+    '2 - Gross Income': getVal('field_gross_income'),
+    '2 - Take Home Per Check': getVal('field_take_home'),
+    '2 - Pay Frequency': getSelect('field_pay_frequency'),
+    '2 - Other Income Sources': getSelect('field_other_income'),
+    '2 - Side Income Detail': getVal('field_side_income_desc'),
+    '2 - Emergency Fund': getRadio('emergency_fund'),
+    '2 - Budgeting Tool': getVal('field_budgeting_tool'),
+    '2 - Total Debt': getRadio('total_debt'),
+    '3 - Ownership': getSelect('field_ownership'),
+    '3 - Housing Payment': getVal('field_housing_payment'),
+    '3 - Square Footage': getSelect('field_sq_ft'),
+    '3 - Year Built': getSelect('field_home_age'),
+    '3 - Renovation History': getRadio('renovation'),
+    '3 - HVAC Systems': getChecked('hvac'),
+    '3 - Thermostat': getSelect('field_thermostat'),
+    '3 - Water Heater': getSelect('field_water_heater'),
+    '3 - Underutilized Spaces': getChecked('space'),
+    '3 - Home Insurance': getVal('field_home_insurance'),
+    '4 - Electric Bill': getVal('field_electric_bill'),
+    '4 - Gas Bill': getVal('field_gas_bill'),
+    '4 - Electric Provider': getVal('field_electric_provider'),
+    '4 - Utility Rate Plan': getSelect('field_utility_plan'),
+    '4 - Solar': getChecked('solar'),
+    '4 - Internet': getVal('field_internet'),
+    '4 - Phone Plan': getVal('field_phone'),
+    '4 - Other Utilities': getVal('field_other_utilities'),
+    '5 - Vehicles': getSelect('field_num_vehicles'),
+    '5 - Car Insurance': getVal('field_car_insurance'),
+    '5 - Annual Miles': getSelect('field_annual_miles'),
+    '5 - Commute Distance': getSelect('field_commute'),
+    '5 - Office Days Per Week': getRadio('office_days'),
+    '5 - Mileage Tracking': getRadio('mileage_tracking'),
+    '6 - Monthly Grocery Spend': getSelect('field_grocery_spend'),
+    '6 - Eating Out Frequency': getSelect('field_eating_out'),
+    '6 - Grocery Stores': getChecked('grocery_stores'),
+    '6 - Coupon Apps': getChecked('coupon_apps'),
+    '6 - Food Storage': getChecked('food_storage'),
+    '6 - Warehouse Membership': getRadio('warehouse_membership'),
+    '7 - Credit Score': getRadio('credit_score'),
+    '7 - CC Rewards Focus': getChecked('cc_rewards'),
+    '7 - Number of Cards': getSelect('field_num_cards'),
+    '7 - Carries Balance': getSelect('field_cc_balance'),
+    '7 - Bank Accounts': getChecked('bank_accounts'),
+    '8 - Retirement Accounts': getChecked('retirement'),
+    '8 - 401k Rate': getVal('field_k401_pct'),
+    '8 - Total Retirement Savings': getSelect('field_total_retirement'),
+    '8 - Tax Advantaged Accounts': getChecked('tax_accounts'),
+    '8 - Tax Filing Method': getRadio('tax_filing'),
+    '8 - Tax Strategies': getChecked('tax_strategies'),
+    '8 - Employer Benefits': getChecked('emp_benefits'),
+    '8 - Health Premium': getVal('field_health_premium'),
+    '8 - Childcare Costs': getVal('field_childcare'),
+    '9 - Subscriptions': getChecked('subscriptions'),
+    '9 - Support Network': getRadio('support_network'),
+    '9 - Preparedness Level': getRadio('prepper'),
+    '9 - Top Priorities': getChecked('priorities'),
+    '9 - Additional Context': getVal('field_anything_else'),
+    '9 - Main Goal': getVal('field_main_goal')
+  };
 
-  // Personalize thank-you page
+  const encoded = Object.entries(fields)
+    .map(([k, v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v || ''))
+    .join('&');
+
+  fetch('https://formspree.io/f/xgopbwdj', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json'
+    },
+    body: encoded
+  }).then(r => {
+    if (!r.ok) console.warn('Formspree returned status:', r.status);
+  }).catch(err => {
+    console.warn('Formspree error:', err);
+  });
+
+  // Personalize and show thank-you page immediately (don't wait for fetch)
   if (displayName) {
     document.getElementById('thanks-name-text').textContent = displayName;
     document.getElementById('thanks-name-note').style.display = 'block';
   }
-
-  // Switch to thank-you page — user never sees the prompt or a redirect
   document.getElementById('page-form').classList.remove('active');
   document.getElementById('page-thanks').classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
