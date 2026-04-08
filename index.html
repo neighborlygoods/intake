@@ -53,12 +53,12 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--c
   gap: 14px;
 }
 .brand-logo {
-  width: 44px;
   height: 44px;
-  border-radius: 8px;
+  width: auto;
   object-fit: contain;
-  background: rgba(255,255,255,0.08);
-  padding: 4px;
+  display: block;
+  filter: brightness(0) invert(1);
+  flex-shrink: 0;
 }
 .brand-logo-img {
   height: 52px;
@@ -1316,7 +1316,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
     </div>
   </div>
 
-  <div class="progress-wrap">
+  <div class="progress-wrap" style="display:none;">
     <span class="progress-label" id="progress-label">Section 1 of 9</span>
     <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
     <span class="progress-pct" id="progress-pct">0%</span>
@@ -2560,26 +2560,27 @@ function submitForm() {
   xhr.send(body);
 }
 
+function buildVenmoUrl() {
+  var note = encodeURIComponent(REF_ID + ' Home Efficiency Report');
+  return 'https://venmo.com/' + VENMO_HANDLE + '?txn=pay&amount=' + REPORT_PRICE + '&note=' + note;
+}
+
 function showThanks() {
   document.getElementById('page-form').classList.remove('active');
   document.getElementById('page-thanks').classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  // Populate Venmo card with ref ID and price
+  // Populate ref ID and price on thank-you page
   var refEl = document.getElementById('thanks-ref-id');
   var priceEl = document.getElementById('thanks-price');
   if (refEl) refEl.textContent = REF_ID;
   if (priceEl) priceEl.textContent = '$' + REPORT_PRICE;
 
-  // Wire up Venmo button with correct URL
-  var note = encodeURIComponent(REF_ID + ' Home Efficiency Report');
-  var venmoUrl = 'https://venmo.com/' + VENMO_HANDLE +
-    '?txn=pay&amount=' + REPORT_PRICE + '&note=' + note;
+  // Wire up Venmo button with live URL
   var venmoBtn = document.getElementById('venmo-pay-btn');
   if (venmoBtn) {
-    venmoBtn.href = venmoUrl;
-    venmoBtn.textContent = '';
-    venmoBtn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M19.5 3.5c.83 1.37.83 2.87.83 4.5 0 4.83-4.13 11.12-7.5 15.5H6.17L3 3.5h5.83l1.67 13.33C12.33 14 14 9.17 14 5.83c0-1.83-.33-3-.83-4.33h6.33z"/></svg> Pay $' + REPORT_PRICE + ' on Venmo → @' + VENMO_HANDLE;
+    venmoBtn.href = buildVenmoUrl();
+    venmoBtn.innerHTML = '∙&nbsp;&nbsp;Pay $' + REPORT_PRICE + ' on Venmo &rarr; @' + VENMO_HANDLE;
   }
 }
 
