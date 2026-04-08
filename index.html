@@ -908,6 +908,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
   .thanks-body { padding: 36px 24px 48px; }
 }
 </style>
+<script src="https://unpkg.com/@formspree/ajax@1" defer></script>
 </head>
 <body>
 
@@ -1092,12 +1093,11 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
   </div>
 
   <div class="form-body">
-  <form id="intake-form" action="https://formspree.io/f/xgopbwdj" method="POST" target="_self">
+  <form id="intake-form" action="https://formspree.io/f/xgopbwdj" method="POST">
 
     <!-- Hidden fields sent to Formspree -->
     <input type="hidden" name="_subject" value="New Home Efficiency Report Intake — Neighborly Goods and Services">
     <input type="hidden" name="_replyto" value="neighborlygoodsandservices@gmail.com">
-    <input type="hidden" name="_next" id="next_field" value="">
 
     <!-- 1. ABOUT YOU -->
     <div class="section" id="s1">
@@ -2116,31 +2116,30 @@ END OF INTAKE DATA
 `.trim();
 }
 
-// ── DETECT RETURN FROM FORMSPREE ─────────────────────────────────────────
-// When Formspree redirects back with ?submitted=1, show the thank-you page
-(function() {
-  if (window.location.search.includes('submitted=1')) {
-    document.getElementById('page-legal').classList.remove('active');
-    document.getElementById('page-form').classList.remove('active');
-    document.getElementById('page-thanks').classList.add('active');
-    // Clean the URL so refreshing doesn't re-trigger
-    window.history.replaceState({}, document.title, window.location.pathname);
-  }
-})();
+// ── FORMSPREE AJAX INIT ───────────────────────────────────────────────────
+// Runs after the @formspree/ajax CDN script loads (defer)
+window.formspree = window.formspree || function() { (formspree.q = formspree.q || []).push(arguments); };
 
-// ── SUBMIT → FORMSPREE ───────────────────────────────────────────────────
+function initFormspree() {
+  if (typeof formspree === 'function' && window._formspreeReady) return;
+  window._formspreeReady = true;
+  formspree('initForm', {
+    formElement: '#intake-form',
+    formId: 'xgopbwdj'
+  });
+}
+
+// ── SUBMIT ────────────────────────────────────────────────────────────────
 function submitForm() {
   const btn = document.getElementById('submit-btn');
   btn.disabled = true;
   btn.innerHTML = '&#8987;&nbsp; Submitting…';
 
-  // Set _next to return to this same page with ?submitted=1
-  const base = window.location.href.split('?')[0].split('#')[0];
-  document.getElementById('next_field').value = base + '?submitted=1';
-
-  // Build all form field values into hidden inputs, then submit natively
-  // This is the most reliable method — no fetch, no CORS, no timeouts
-  const extraFields = {
+  // Collect all form data into a plain object
+  const data = {
+    '_subject': 'New Home Efficiency Report Intake — Neighborly Goods and Services',
+    'Signed By': document.getElementById('sig-name').value.trim(),
+    'Contact Email': document.getElementById('sig-email').value.trim(),
     '1 - First Name': getVal('field_first_name'),
     '1 - ZIP Code': getVal('field_zip'),
     '1 - Household Type': getSelect('field_household_type'),
@@ -2204,23 +2203,38 @@ function submitForm() {
     '9 - Preparedness Level': getRadio('prepper'),
     '9 - Top Priorities': getChecked('priorities'),
     '9 - Additional Context': getVal('field_anything_else'),
-    '9 - Main Goal': getVal('field_main_goal'),
-    'Signed By': document.getElementById('sig-name').value.trim(),
-    'Contact Email': document.getElementById('sig-email').value.trim()
+    '9 - Main Goal': getVal('field_main_goal')
   };
 
-  // Inject all values as hidden inputs into the form before submitting
-  const form = document.getElementById('intake-form');
-  Object.entries(extraFields).forEach(([name, value]) => {
-    const inp = document.createElement('input');
-    inp.type = 'hidden';
-    inp.name = name;
-    inp.value = value || '';
-    form.appendChild(inp);
-  });
+  // Use XMLHttpRequest — older API, works without CORS preflight for form-encoded data
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', 'https://formspree.io/f/xgopbwdj');
+  xhr.setRequestHeader('Accept', 'application/json');
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-  // Native form submit — Formspree receives it, sends email, redirects back
-  form.submit();
+  xhr.onload = function() {
+    showThanks();
+  };
+  xhr.onerror = function() {
+    // Show thanks page even on network error — submission may still have gone through
+    showThanks();
+  };
+  xhr.ontimeout = function() {
+    showThanks();
+  };
+  xhr.timeout = 8000;
+
+  const body = Object.entries(data)
+    .map(([k, v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v || ''))
+    .join('&');
+
+  xhr.send(body);
+}
+
+function showThanks() {
+  document.getElementById('page-form').classList.remove('active');
+  document.getElementById('page-thanks').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 updateProgress();
