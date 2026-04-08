@@ -1592,7 +1592,13 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
       <p>When you click below, your answers will be compiled and sent to your report advisor. Your personalized Home Efficiency Report will be delivered to you digitally. Want to discuss the results afterward? Follow-up consultations are available — just ask your advisor.</p>
       <button type="button" class="btn-primary" onclick="generatePrompt()">&#10003;&nbsp; Submit My Intake Form</button>
     </div>
+<form action="https://formspree.io/f/xgopbwdj" method="POST">
 
+  <!-- Ensures submissions go to your email -->
+  <input type="hidden" name="_subject" value="New Intake Submission - Neighborly Goods">
+
+  <!-- Redirect after submission -->
+  <input type="hidden" name="_redirect" value="https://neighborlygoods.github.io/submission.html">
   </form>
 
   <div id="output-section">
