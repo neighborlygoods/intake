@@ -992,6 +992,58 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
   line-height: 1.65;
   margin: 0;
 }
+
+/* ── PAYMENT BLOCK ── */
+.payment-block {
+  background: var(--amber-light);
+  border: 1px solid #fde68a;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+.payment-block-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.payment-block-top h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 17px;
+  color: var(--ink);
+  font-weight: 400;
+}
+.payment-ref {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--amber);
+  background: white;
+  border: 1px solid #fde68a;
+  border-radius: 6px;
+  padding: 5px 12px;
+}
+.payment-block p {
+  font-size: 13px;
+  color: var(--ink-mid);
+  line-height: 1.7;
+  margin: 0;
+}
+.payment-block strong { color: var(--ink); font-weight: 500; }
+.payment-price {
+  font-family: 'DM Serif Display', serif;
+  font-size: 28px;
+  color: var(--ink);
+  margin: 10px 0 4px;
+}
+.payment-note {
+  font-size: 12px;
+  color: var(--ink-light);
+  font-style: italic;
+}
 </style>
 <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
 </head>
@@ -1852,6 +1904,17 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
     <!-- SUBMIT -->
     <div class="submit-area">
 
+      <!-- Payment block -->
+      <div class="payment-block">
+        <div class="payment-block-top">
+          <h3>Payment — due at submission</h3>
+          <span class="payment-ref" id="display-ref-id">NGS-····</span>
+        </div>
+        <div class="payment-price" id="display-price">$25</div>
+        <p>After submitting your form, you’ll be taken directly to Venmo to complete your payment. <strong>Please don’t change the note field</strong> — it contains your reference ID so we can match your payment to your report.</p>
+        <p class="payment-note" style="margin-top:8px;">Your report will be prepared after payment is received.</p>
+      </div>
+
       <!-- What happens next -->
       <div class="submit-next-card">
         <div class="submit-next-header">
@@ -1998,6 +2061,19 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
 </div><!-- /page-thanks -->
 
 <script>
+// ── CONFIG (change price here anytime) ───────────────────────────────────
+const REPORT_PRICE = 25;       // <-- update this number to change the price
+const VENMO_HANDLE = 'NeighborlyGS';
+
+// ── GENERATE REFERENCE ID ─────────────────────────────────────────────────
+const REF_ID = 'NGS-' + Math.random().toString(36).substr(2,4).toUpperCase();
+document.addEventListener('DOMContentLoaded', function() {
+  var el = document.getElementById('display-ref-id');
+  if (el) el.textContent = REF_ID;
+  var pe = document.getElementById('display-price');
+  if (pe) pe.textContent = '$' + REPORT_PRICE;
+});
+
 // ── SIGNATURE CANVAS ──────────────────────────────────────────────────────
 const canvas = document.getElementById('sig-canvas');
 const ctx = canvas.getContext('2d');
@@ -2282,6 +2358,8 @@ function submitForm() {
 
   const data = {
     '_subject': 'New Home Efficiency Report Intake — Neighborly Goods and Services',
+    'Reference ID': REF_ID,
+    'Amount Due': '$' + REPORT_PRICE,
     'Signed By': document.getElementById('sig-name').value.trim(),
     'Contact Email': document.getElementById('sig-email').value.trim(),
     '1 - First Name': getVal('field_first_name'),
@@ -2369,6 +2447,14 @@ function showThanks() {
   document.getElementById('page-form').classList.remove('active');
   document.getElementById('page-thanks').classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Redirect to Venmo after 2 seconds so user sees the thank-you page first
+  const note = encodeURIComponent(REF_ID + ' Home Efficiency Report');
+  const venmoUrl = 'https://venmo.com/' + VENMO_HANDLE +
+    '?txn=pay&amount=' + REPORT_PRICE + '&note=' + note;
+  setTimeout(function() {
+    window.location.href = venmoUrl;
+  }, 2000);
 }
 
 updateProgress();
