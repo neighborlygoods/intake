@@ -1044,6 +1044,99 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
   color: var(--ink-light);
   font-style: italic;
 }
+
+/* ── VENMO PAYMENT CARD ── */
+.venmo-card {
+  background: var(--white);
+  border: 2px solid #3d95ce;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(61,149,206,0.15);
+  margin-bottom: 24px;
+}
+.venmo-card-header {
+  background: #3d95ce;
+  padding: 18px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.venmo-card-header h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 19px;
+  color: white;
+  font-weight: 400;
+}
+.venmo-amount-badge {
+  font-size: 22px;
+  font-weight: 500;
+  color: white;
+  font-family: 'DM Serif Display', serif;
+}
+.venmo-card-body {
+  padding: 24px 28px 28px;
+}
+.venmo-ref-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--cream);
+  border: 1px solid var(--cream-border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+}
+.venmo-ref-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  white-space: nowrap;
+}
+.venmo-ref-value {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+  font-family: monospace;
+  letter-spacing: 0.05em;
+}
+.venmo-instructions {
+  font-size: 13px;
+  color: var(--ink-mid);
+  line-height: 1.75;
+  margin-bottom: 20px;
+}
+.venmo-instructions strong { color: var(--ink); font-weight: 500; }
+.btn-venmo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 24px;
+  background: #3d95ce;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.1s;
+  box-sizing: border-box;
+}
+.btn-venmo:hover { background: #2e7ab0; }
+.btn-venmo:active { transform: scale(0.99); }
+.venmo-subtext {
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-xlight);
+  margin-top: 12px;
+  font-style: italic;
+}
 </style>
 <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
 </head>
@@ -1200,7 +1293,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
     <div class="hero-inner">
       <div class="hero-top">
         <div class="brand-lockup">
-              <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/wAARCAfQB9ADASIAAhEBAxEB/8QAHQABAAIDAQEBAQAAAAAAAAAAAAcIBQYJBAMCAf/EAAAAAQABAgMEBQYHCA== " alt="Neighborly Goods and Services LLC" class="brand-logo-img">
+              <img src="logo.png" alt="Neighborly Goods and Services LLC" class="brand-logo">
           <div>
             <div class="brand-name" style="font-family:'DM Serif Display',serif;font-size:15px;color:white;line-height:1.2;">Neighborly Goods and Services</div>
             <div style="font-size:11px;color:rgba(255,255,255,0.4);font-weight:300;letter-spacing:0.04em;">Home Efficiency Reports</div>
@@ -2001,6 +2094,30 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
 
   <div class="thanks-body">
 
+    <!-- VENMO PAYMENT CARD -->
+    <div class="venmo-card" id="venmo-card">
+      <div class="venmo-card-header">
+        <h2>Complete your payment</h2>
+        <span class="venmo-amount-badge" id="thanks-price">$25</span>
+      </div>
+      <div class="venmo-card-body">
+        <div class="venmo-ref-row">
+          <span class="venmo-ref-label">Your reference ID</span>
+          <span class="venmo-ref-value" id="thanks-ref-id">NGS-····</span>
+        </div>
+        <p class="venmo-instructions">
+          Tap the button below to pay via Venmo. The note field will be pre-filled with your reference ID — <strong>please don't change it</strong>. That's how we match your payment to your report and get started right away.
+        </p>
+        <a href="#" id="venmo-pay-btn" class="btn-venmo" target="_blank">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19.5 3.5c.83 1.37.83 2.87.83 4.5 0 4.83-4.13 11.12-7.5 15.5H6.17L3 3.5h5.83l1.67 13.33C12.33 14 14 9.17 14 5.83c0-1.83-.33-3-.83-4.33h6.33z"/>
+          </svg>
+          Pay $25 on Venmo → @NeighborlyGS
+        </a>
+        <p class="venmo-subtext">Your report preparation begins once payment is received.</p>
+      </div>
+    </div>
+
     <div id="thanks-name-note" class="thanks-name-callout">
       We appreciate you taking the time to share the details of your household with us. The more you gave us to work with, the more useful your report will be.
     </div>
@@ -2448,13 +2565,22 @@ function showThanks() {
   document.getElementById('page-thanks').classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  // Redirect to Venmo after 2 seconds so user sees the thank-you page first
-  const note = encodeURIComponent(REF_ID + ' Home Efficiency Report');
-  const venmoUrl = 'https://venmo.com/' + VENMO_HANDLE +
+  // Populate Venmo card with ref ID and price
+  var refEl = document.getElementById('thanks-ref-id');
+  var priceEl = document.getElementById('thanks-price');
+  if (refEl) refEl.textContent = REF_ID;
+  if (priceEl) priceEl.textContent = '$' + REPORT_PRICE;
+
+  // Wire up Venmo button with correct URL
+  var note = encodeURIComponent(REF_ID + ' Home Efficiency Report');
+  var venmoUrl = 'https://venmo.com/' + VENMO_HANDLE +
     '?txn=pay&amount=' + REPORT_PRICE + '&note=' + note;
-  setTimeout(function() {
-    window.location.href = venmoUrl;
-  }, 2000);
+  var venmoBtn = document.getElementById('venmo-pay-btn');
+  if (venmoBtn) {
+    venmoBtn.href = venmoUrl;
+    venmoBtn.textContent = '';
+    venmoBtn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M19.5 3.5c.83 1.37.83 2.87.83 4.5 0 4.83-4.13 11.12-7.5 15.5H6.17L3 3.5h5.83l1.67 13.33C12.33 14 14 9.17 14 5.83c0-1.83-.33-3-.83-4.33h6.33z"/></svg> Pay $' + REPORT_PRICE + ' on Venmo → @' + VENMO_HANDLE;
+  }
 }
 
 updateProgress();
