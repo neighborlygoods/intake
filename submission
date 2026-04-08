@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thank You</title>
+<style>
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #fafaf9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  color: #1c1917;
+}
+.container {
+  max-width: 500px;
+}
+h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 32px;
+  margin-bottom: 16px;
+}
+p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #44403c;
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Thank you for your submission</h1>
+    <p>
+      Thank you!  Your intake has been received successfully.<br><br>
+      You will receive your Home Efficiency Report within <strong>1–2 business days</strong>.
+    </p>
+  </div>
+</body>
+</html>
