@@ -73,22 +73,6 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--c
 .brand-logo-img.light-bg {
   filter: brightness(0);
 }
-.brand-logo-placeholder {
-  width: 44px;
-  height: 44px;
-  border-radius: 8px;
-  background: rgba(111,163,125,0.25);
-  border: 1px solid rgba(111,163,125,0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.brand-logo-placeholder svg {
-  width: 22px;
-  height: 22px;
-  fill: var(--sage-mid);
-}
 .brand-name {
   font-family: 'DM Serif Display', serif;
   font-size: 17px;
@@ -668,6 +652,74 @@ select {
 
 .note { background: var(--sage-light); border-left: 3px solid var(--sage); padding: 12px 16px; border-radius: 0 6px 6px 0; font-size: 13px; color: var(--ink-mid); line-height: 1.6; margin-bottom: 20px; }
 .note strong { color: var(--sage-dark); font-weight: 500; }
+
+/* ── Conditional field slide-in ── */
+.conditional-field {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.35s ease, opacity 0.3s ease, margin-bottom 0.35s ease;
+  margin-bottom: 0;
+}
+.conditional-field.visible {
+  max-height: 300px;
+  opacity: 1;
+  margin-bottom: 22px;
+}
+
+/* ── Info tooltip ── */
+.label-with-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.info-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--ink-xlight);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  flex-shrink: 0;
+  margin-top: 1px;
+  transition: background 0.2s;
+  position: relative;
+}
+.info-btn:hover { background: var(--sage); }
+.info-tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: white;
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 1.6;
+  padding: 10px 14px;
+  border-radius: 8px;
+  width: 260px;
+  z-index: 200;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+.info-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--ink);
+}
+.info-btn:hover .info-tooltip,
+.info-btn:focus .info-tooltip { display: block; }
 
 .submit-area { border-top: 1px solid var(--cream-border); padding-top: 40px; margin-top: 48px; text-align: center; }
 .submit-area p { font-size: 13px; color: var(--ink-light); margin-bottom: 20px; line-height: 1.6; }
@@ -1293,7 +1345,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
     <div class="hero-inner">
       <div class="hero-top">
         <div class="brand-lockup">
-              <img src="logo.png" alt="Neighborly Goods and Services LLC" class="brand-logo">
+          <img src="logo.png" alt="Neighborly Goods and Services LLC" class="brand-logo">
           <div>
             <div class="brand-name" style="font-family:'DM Serif Display',serif;font-size:15px;color:white;line-height:1.2;">Neighborly Goods and Services</div>
             <div style="font-size:11px;color:rgba(255,255,255,0.4);font-weight:300;letter-spacing:0.04em;">Home Efficiency Reports</div>
@@ -1326,7 +1378,8 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
   <form id="intake-form" action="https://formspree.io/f/xgopbwdj" method="POST">
 
     <!-- Hidden fields sent to Formspree -->
-    <input type="hidden" name="_subject" value="New Home Efficiency Report Intake — Neighborly Goods and Services">
+    <!-- CHANGE 1: subject line now includes REF_ID, set dynamically in JS -->
+    <input type="hidden" name="_subject" id="email_subject" value="New Home Efficiency Report Intake — Neighborly Goods and Services">
     <input type="hidden" name="_replyto" value="neighborlygoodsandservices@gmail.com">
     <input type="hidden" name="_next" id="next_field" value="">
 
@@ -1350,7 +1403,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
       <div class="field-row">
         <div class="field">
           <label>Household type</label>
-          <select name="household_type" id="field_household_type">
+          <select name="household_type" id="field_household_type" onchange="toggleDaycareField()">
             <option value="">Select…</option>
             <option>Single, no kids</option>
             <option>Single parent</option>
@@ -1366,10 +1419,29 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
           <input type="number" name="household_size" id="field_household_size" min="1" max="20" placeholder="e.g. 4">
         </div>
       </div>
+
+      <!-- Children ages field — triggers daycare question -->
       <div class="field">
-        <label>Ages of any children in the home <span class="optional">(optional)</span> <span class="hint">e.g. 3</span></label>
-        <input type="text" name="children_ages" id="field_children_ages" placeholder="e.g. 3">
+        <label>Ages of any children in the home <span class="optional">(optional)</span> <span class="hint">e.g. 3, 7, 10</span></label>
+        <input type="text" name="children_ages" id="field_children_ages" placeholder="e.g. 3, 7, 10" oninput="toggleDaycareField()">
       </div>
+
+      <!-- CHANGE 2: Daycare/school question — conditional on children being present -->
+      <div class="conditional-field" id="field_daycare_wrap">
+        <div class="field" style="margin-bottom:0;">
+          <label>Do any of your children attend daycare or school outside the home? <span class="hint">Select all that apply</span></label>
+          <div class="check-group">
+            <label><input type="checkbox" name="childcare_setting" value="daycare"> Daycare / childcare center</label>
+            <label><input type="checkbox" name="childcare_setting" value="in_home_daycare"> In-home daycare provider</label>
+            <label><input type="checkbox" name="childcare_setting" value="preschool"> Preschool / pre-K</label>
+            <label><input type="checkbox" name="childcare_setting" value="public_school"> Public school (K–12)</label>
+            <label><input type="checkbox" name="childcare_setting" value="private_school"> Private school</label>
+            <label><input type="checkbox" name="childcare_setting" value="homeschool"> Homeschooled</label>
+            <label><input type="checkbox" name="childcare_setting" value="none_yet"> Not yet / stay at home</label>
+          </div>
+        </div>
+      </div>
+
       <div class="field">
         <label>Are you currently going through any major life transitions?</label>
         <div class="check-group">
@@ -1523,10 +1595,12 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
           <label><input type="checkbox" name="hvac" value="unknown"> Not sure</label>
         </div>
       </div>
+
+      <!-- CHANGE 3: Thermostat with conditional brand question -->
       <div class="field-row">
         <div class="field">
           <label>Thermostat type</label>
-          <select name="thermostat" id="field_thermostat">
+          <select name="thermostat" id="field_thermostat" onchange="toggleThermostatBrand()">
             <option value="">Select…</option>
             <option>Smart thermostat (Nest, Ecobee, etc.)</option>
             <option>Programmable thermostat</option>
@@ -1547,6 +1621,15 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
           </select>
         </div>
       </div>
+
+      <!-- Conditional: smart thermostat brand -->
+      <div class="conditional-field" id="field_thermostat_brand_wrap">
+        <div class="field" style="margin-bottom:0;">
+          <label>Smart thermostat brand <span class="hint">e.g. Nest, Ecobee, Honeywell Home, Sensi</span></label>
+          <input type="text" name="thermostat_brand" id="field_thermostat_brand" placeholder="e.g. Ecobee SmartThermostat Premium">
+        </div>
+      </div>
+
       <div class="field">
         <label>Underutilized spaces <span class="hint">Select any not currently generating value</span></label>
         <div class="check-group">
@@ -1559,10 +1642,72 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
           <label><input type="checkbox" name="space" value="none"> None</label>
         </div>
       </div>
-      <div class="field">
-        <label>Homeowners / renters insurance <span class="hint">Provider and monthly cost</span></label>
-        <input type="text" name="home_insurance" id="field_home_insurance" placeholder="e.g. Progressive, $208/mo">
+
+      <!-- CHANGE 7: Homeowners insurance monthly cost (separate from provider) -->
+      <div class="field-row">
+        <div class="field">
+          <label>Homeowners / renters insurance provider</label>
+          <input type="text" name="home_insurance_provider" id="field_home_insurance_provider" placeholder="e.g. Progressive, State Farm">
+        </div>
+        <div class="field">
+          <label>Homeowners / renters insurance <span class="hint">Monthly cost</span></label>
+          <div class="input-prefix"><span class="prefix">$</span><input type="number" name="home_insurance_monthly" id="field_home_insurance_monthly" placeholder="e.g. 120"></div>
+        </div>
       </div>
+
+      <!-- CHANGE 6: Gas or electric stove -->
+      <div class="field">
+        <label>Stove / range type</label>
+        <div class="radio-group">
+          <label><input type="radio" name="stove_type" value="gas"> Gas</label>
+          <label><input type="radio" name="stove_type" value="electric_coil"> Electric (coil)</label>
+          <label><input type="radio" name="stove_type" value="electric_smooth"> Electric (smooth top / radiant)</label>
+          <label><input type="radio" name="stove_type" value="induction"> Induction</label>
+          <label><input type="radio" name="stove_type" value="unknown"> Not sure</label>
+        </div>
+      </div>
+
+      <!-- CHANGE 5: Appliance make/model fields with info tooltips -->
+      <div class="field">
+        <label>
+          <span class="label-with-info">
+            Washing machine make &amp; model
+            <button type="button" class="info-btn" tabindex="-1" aria-label="Where to find this">
+              i
+              <span class="info-tooltip">Usually found on a sticker inside the door frame or lid. It lists the brand name and a model number (e.g., LG WM3400CW). You can also check your owner's manual or the back of the machine.</span>
+            </button>
+          </span>
+          <span class="hint">e.g. LG WM3400CW, Samsung WF45R6100AW</span>
+        </label>
+        <input type="text" name="washer_model" id="field_washer_model" placeholder="e.g. LG WM3400CW">
+      </div>
+      <div class="field">
+        <label>
+          <span class="label-with-info">
+            Dryer make &amp; model
+            <button type="button" class="info-btn" tabindex="-1" aria-label="Where to find this">
+              i
+              <span class="info-tooltip">Look for a sticker inside the door opening or on the back panel. The model number is usually a combination of letters and numbers (e.g., Whirlpool WED5000DW). Also check the back of the unit near the power cord.</span>
+            </button>
+          </span>
+          <span class="hint">e.g. Whirlpool WED5000DW, GE GTD65EBSJWS</span>
+        </label>
+        <input type="text" name="dryer_model" id="field_dryer_model" placeholder="e.g. Whirlpool WED5000DW">
+      </div>
+      <div class="field">
+        <label>
+          <span class="label-with-info">
+            Dishwasher make &amp; model
+            <button type="button" class="info-btn" tabindex="-1" aria-label="Where to find this">
+              i
+              <span class="info-tooltip">Open the dishwasher door and look along the inner edge of the door or the side wall inside the tub. The model number sticker is typically there. Bosch, for example, places it on the top edge of the inner door.</span>
+            </button>
+          </span>
+          <span class="hint">e.g. Bosch SHPM88Z75N, KitchenAid KDTM354DSS</span>
+        </label>
+        <input type="text" name="dishwasher_model" id="field_dishwasher_model" placeholder="e.g. Bosch SHPM88Z75N">
+      </div>
+
     </div>
 
     <!-- 4. UTILITIES -->
@@ -1644,11 +1789,16 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
           </select>
         </div>
         <div class="field">
-          <label>Car insurance — provider &amp; total monthly cost</label>
-          <input type="text" name="car_insurance" id="field_car_insurance" placeholder="e.g. Progressive, $57/mo">
+          <!-- CHANGE 8: Car insurance monthly cost (separate field) -->
+          <label>Car insurance provider</label>
+          <input type="text" name="car_insurance_provider" id="field_car_insurance_provider" placeholder="e.g. Progressive, State Farm">
         </div>
       </div>
       <div class="field-row">
+        <div class="field">
+          <label>Car insurance monthly cost</label>
+          <div class="input-prefix"><span class="prefix">$</span><input type="number" name="car_insurance_monthly" id="field_car_insurance_monthly" placeholder="e.g. 140"></div>
+        </div>
         <div class="field">
           <label>Estimated annual miles driven</label>
           <select name="annual_miles" id="field_annual_miles">
@@ -1660,6 +1810,19 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
             <option>Over 20,000</option>
           </select>
         </div>
+      </div>
+
+      <!-- CHANGE 9: Vehicle make/model/year — one row per vehicle -->
+      <div class="field">
+        <label>Vehicle 1 — make, model, and year <span class="hint">e.g. 2019 Honda CR-V</span></label>
+        <input type="text" name="vehicle_1" id="field_vehicle_1" placeholder="e.g. 2019 Honda CR-V EX">
+      </div>
+      <div class="field">
+        <label>Vehicle 2 — make, model, and year <span class="optional">(if applicable)</span> <span class="hint">e.g. 2021 Ford F-150</span></label>
+        <input type="text" name="vehicle_2" id="field_vehicle_2" placeholder="e.g. 2021 Ford F-150 XLT">
+      </div>
+
+      <div class="field-row">
         <div class="field">
           <label>One-way commute distance</label>
           <select name="commute" id="field_commute">
@@ -1671,8 +1834,6 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
             <option>Over 30 miles</option>
           </select>
         </div>
-      </div>
-      <div class="field-row">
         <div class="field">
           <label>Days per week in an office</label>
           <div class="radio-group">
@@ -1682,14 +1843,14 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
             <label><input type="radio" name="office_days" value="5"> 5 days</label>
           </div>
         </div>
-        <div class="field">
-          <label>Do you track mileage for tax / reimbursement?</label>
-          <div class="radio-group">
-            <label><input type="radio" name="mileage_tracking" value="yes_full"> Yes, fully</label>
-            <label><input type="radio" name="mileage_tracking" value="yes_partial"> Partially</label>
-            <label><input type="radio" name="mileage_tracking" value="no"> No</label>
-            <label><input type="radio" name="mileage_tracking" value="na"> N/A</label>
-          </div>
+      </div>
+      <div class="field">
+        <label>Do you track mileage for tax / reimbursement?</label>
+        <div class="radio-group">
+          <label><input type="radio" name="mileage_tracking" value="yes_full"> Yes, fully</label>
+          <label><input type="radio" name="mileage_tracking" value="yes_partial"> Partially</label>
+          <label><input type="radio" name="mileage_tracking" value="no"> No</label>
+          <label><input type="radio" name="mileage_tracking" value="na"> N/A</label>
         </div>
       </div>
     </div>
@@ -1793,17 +1954,27 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
           <label><input type="radio" name="credit_score" value="800plus"> 800+</label>
         </div>
       </div>
+      <!-- CHANGE 4: CC rewards focus triggers conditional card list -->
       <div class="field">
         <label>Credit card rewards focus <span class="hint">Select all that apply</span></label>
-        <div class="check-group">
+        <div class="check-group" id="cc_rewards_group" onchange="toggleCCList()">
           <label><input type="checkbox" name="cc_rewards" value="cash_back"> Cash back</label>
           <label><input type="checkbox" name="cc_rewards" value="travel"> Travel points / miles</label>
           <label><input type="checkbox" name="cc_rewards" value="churning"> Sign-on bonuses (churning)</label>
           <label><input type="checkbox" name="cc_rewards" value="store"> Store-specific rewards</label>
           <label><input type="checkbox" name="cc_rewards" value="none"> Not actively optimizing</label>
-          <label><input type="checkbox" name="cc_rewards" value="no_cards"> I don't use credit cards</label>
+          <label><input type="checkbox" name="cc_rewards" value="no_cards" id="cc_no_cards"> I don't use credit cards</label>
         </div>
       </div>
+
+      <!-- Conditional: which credit cards do you use -->
+      <div class="conditional-field" id="field_cc_list_wrap">
+        <div class="field" style="margin-bottom:0;">
+          <label>Which credit cards do you actively use? <span class="hint">List the cards you use regularly — name, issuer, or nickname is fine</span></label>
+          <textarea name="cc_list" id="field_cc_list" placeholder="e.g. Chase Sapphire Preferred, Amazon Prime Visa, Target RedCard, Citi Double Cash" rows="3"></textarea>
+        </div>
+      </div>
+
       <div class="field-row">
         <div class="field">
           <label>Number of credit cards currently open</label>
@@ -1997,18 +2168,16 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
     <!-- SUBMIT -->
     <div class="submit-area">
 
-      <!-- Payment block -->
       <div class="payment-block">
         <div class="payment-block-top">
           <h3>Payment — due at submission</h3>
           <span class="payment-ref" id="display-ref-id">NGS-····</span>
         </div>
         <div class="payment-price" id="display-price">$25</div>
-        <p>After submitting your form, you’ll be taken directly to Venmo to complete your payment. <strong>Please don’t change the note field</strong> — it contains your reference ID so we can match your payment to your report.</p>
+        <p>After submitting your form, you'll be taken directly to Venmo to complete your payment. <strong>Please don't change the note field</strong> — it contains your reference ID so we can match your payment to your report.</p>
         <p class="payment-note" style="margin-top:8px;">Your report will be prepared after payment is received.</p>
       </div>
 
-      <!-- What happens next -->
       <div class="submit-next-card">
         <div class="submit-next-header">
           <div class="submit-next-icon">
@@ -2023,21 +2192,21 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
             <div class="submit-next-num">1</div>
             <div class="submit-next-text">
               <strong>Your form is in our hands</strong>
-              <span>We’ll receive your intake answers and begin reviewing your household profile.</span>
+              <span>We'll receive your intake answers and begin reviewing your household profile.</span>
             </div>
           </div>
           <div class="submit-next-step">
             <div class="submit-next-num">2</div>
             <div class="submit-next-text">
               <strong>Your report is prepared</strong>
-              <span>We’ll research programs, rates, strategies, and opportunities specific to your ZIP code, income, and situation.</span>
+              <span>We'll research programs, rates, strategies, and opportunities specific to your ZIP code, income, and situation.</span>
             </div>
           </div>
           <div class="submit-next-step">
             <div class="submit-next-num">3</div>
             <div class="submit-next-text">
               <strong>Delivery within 1–2 business days</strong>
-              <span>Your personalized Home Efficiency Report arrives digitally. Keep an eye out — it’s worth the read.</span>
+              <span>Your personalized Home Efficiency Report arrives digitally. Keep an eye out — it's worth the read.</span>
             </div>
           </div>
         </div>
@@ -2055,7 +2224,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
     </div>
 
   </form>
-  </div><!-- /form-body -->
+  </div>
 
   <footer>
     <strong>Neighborly Goods and Services LLC</strong> &nbsp;·&nbsp; Home Efficiency Reports<br>
@@ -2063,7 +2232,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
     Questions? Contact Neighborly Goods and Services before completing this form.
   </footer>
 
-</div><!-- /page-form -->
+</div>
 
 <!-- ══════════════════════════════════════
      PAGE 3: THANK YOU
@@ -2094,7 +2263,6 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
 
   <div class="thanks-body">
 
-    <!-- VENMO PAYMENT CARD -->
     <div class="venmo-card" id="venmo-card">
       <div class="venmo-card-header">
         <h2>Complete your payment</h2>
@@ -2175,21 +2343,77 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
   </footer>
 
 </div>
-</div><!-- /page-thanks -->
+</div>
 
 <script>
-// ── CONFIG (change price here anytime) ───────────────────────────────────
-const REPORT_PRICE = 25;       // <-- update this number to change the price
+// ── CONFIG ───────────────────────────────────────────────────────────────
+const REPORT_PRICE = 25;
 const VENMO_HANDLE = 'NeighborlyGS';
 
 // ── GENERATE REFERENCE ID ─────────────────────────────────────────────────
 const REF_ID = 'NGS-' + Math.random().toString(36).substr(2,4).toUpperCase();
+
 document.addEventListener('DOMContentLoaded', function() {
+  // Display ref ID on form page
   var el = document.getElementById('display-ref-id');
   if (el) el.textContent = REF_ID;
   var pe = document.getElementById('display-price');
   if (pe) pe.textContent = '$' + REPORT_PRICE;
+
+  // CHANGE 1: Set email subject to include the Venmo reference ID
+  var subj = document.getElementById('email_subject');
+  if (subj) subj.value = 'New Intake Submission — ' + REF_ID;
 });
+
+// ── CONDITIONAL: daycare/school question ─────────────────────────────────
+// Shows when household type includes kids OR children_ages has content
+function hasChildren() {
+  var hhType = document.getElementById('field_household_type').value;
+  var childAges = document.getElementById('field_children_ages').value.trim();
+  var kidTypes = ['Single parent', 'Married / partnered with kids', 'Multi-generational household'];
+  return kidTypes.includes(hhType) || childAges.length > 0;
+}
+
+function toggleDaycareField() {
+  var wrap = document.getElementById('field_daycare_wrap');
+  if (hasChildren()) {
+    wrap.classList.add('visible');
+  } else {
+    wrap.classList.remove('visible');
+    // Clear selections when hidden
+    document.querySelectorAll('input[name="childcare_setting"]').forEach(function(cb) {
+      cb.checked = false;
+    });
+  }
+}
+
+// ── CONDITIONAL: smart thermostat brand ──────────────────────────────────
+function toggleThermostatBrand() {
+  var val = document.getElementById('field_thermostat').value;
+  var wrap = document.getElementById('field_thermostat_brand_wrap');
+  if (val === 'Smart thermostat (Nest, Ecobee, etc.)') {
+    wrap.classList.add('visible');
+  } else {
+    wrap.classList.remove('visible');
+    document.getElementById('field_thermostat_brand').value = '';
+  }
+}
+
+// ── CONDITIONAL: credit card list ────────────────────────────────────────
+function toggleCCList() {
+  var noCards = document.getElementById('cc_no_cards').checked;
+  var anyOtherChecked = Array.from(
+    document.querySelectorAll('input[name="cc_rewards"]:checked')
+  ).some(function(el) { return el.value !== 'no_cards' && el.value !== 'none'; });
+
+  var wrap = document.getElementById('field_cc_list_wrap');
+  if (!noCards && anyOtherChecked) {
+    wrap.classList.add('visible');
+  } else {
+    wrap.classList.remove('visible');
+    document.getElementById('field_cc_list').value = '';
+  }
+}
 
 // ── SIGNATURE CANVAS ──────────────────────────────────────────────────────
 const canvas = document.getElementById('sig-canvas');
@@ -2288,7 +2512,7 @@ const obs = new IntersectionObserver(entries => {
 }, { threshold: 0.06 });
 sections.forEach(s => obs.observe(s));
 
-// ── HELPER: collect checked values for a field name ───────────────────────
+// ── HELPERS ───────────────────────────────────────────────────────────────
 function getChecked(name) {
   return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`))
     .map(el => el.value).join(', ') || 'Not selected';
@@ -2318,19 +2542,9 @@ NEIGHBORLY GOODS AND SERVICES LLC
 HOME EFFICIENCY REPORT — CLIENT INTAKE DATA
 ==========================================================
 Submitted: ${now}
+Reference ID: ${REF_ID}
 Signed by: ${sigName || 'Not provided'}
 Contact email (if given): ${sigEmail || 'Not provided'}
-
-Please use all of the client data below to generate a comprehensive, beautifully formatted Home Efficiency Report as a PDF. The report should:
-- Use a warm, sage green and cream color palette with dark charcoal text (matching the Neighborly Goods brand aesthetic)
-- Include clear section headers with numbered sections
-- Lead each section with 2–3 key observations specific to this client's data, followed by actionable recommendations
-- Estimate dollar savings or income potential in dollars per year wherever possible
-- Highlight "quick wins" (things the client can do immediately with no cost) vs. "strategic moves" (things requiring more effort or investment)
-- Use tables or comparison layouts where relevant (e.g., current vs. optimized utility plan)
-- End with a prioritized action plan ranked by estimated impact
-- Be written in a warm, direct, neighbor-to-neighbor voice — not corporate or clinical
-- Include a brief disclaimer at the end that this is for educational awareness only and not professional financial, legal, or tax advice
 
 ----------------------------------------------------------
 SECTION 1: ABOUT THE CLIENT
@@ -2340,6 +2554,7 @@ ZIP code: ${getVal('field_zip')}
 Household type: ${getSelect('field_household_type')}
 Household size: ${getVal('field_household_size')} people
 Children's ages: ${getVal('field_children_ages')}
+Childcare / school settings: ${getChecked('childcare_setting')}
 Life transitions underway: ${getChecked('transition')}
 
 ----------------------------------------------------------
@@ -2364,9 +2579,15 @@ Year built: ${getSelect('field_home_age')}
 Renovation / weatherization history: ${getRadio('renovation')}
 Heating & cooling systems: ${getChecked('hvac')}
 Thermostat type: ${getSelect('field_thermostat')}
+Smart thermostat brand: ${getVal('field_thermostat_brand')}
 Water heater type: ${getSelect('field_water_heater')}
+Stove / range type: ${getRadio('stove_type')}
 Underutilized spaces: ${getChecked('space')}
-Home/renters insurance: ${getVal('field_home_insurance')}
+Home/renters insurance provider: ${getVal('field_home_insurance_provider')}
+Home/renters insurance monthly cost: $${getVal('field_home_insurance_monthly')}
+Washing machine make & model: ${getVal('field_washer_model')}
+Dryer make & model: ${getVal('field_dryer_model')}
+Dishwasher make & model: ${getVal('field_dishwasher_model')}
 
 ----------------------------------------------------------
 SECTION 4: UTILITIES & ENERGY
@@ -2384,7 +2605,10 @@ Other utilities: ${getVal('field_other_utilities')}
 SECTION 5: TRANSPORTATION
 ----------------------------------------------------------
 Number of vehicles: ${getSelect('field_num_vehicles')}
-Car insurance provider & cost: ${getVal('field_car_insurance')}
+Vehicle 1 (make/model/year): ${getVal('field_vehicle_1')}
+Vehicle 2 (make/model/year): ${getVal('field_vehicle_2')}
+Car insurance provider: ${getVal('field_car_insurance_provider')}
+Car insurance monthly cost: $${getVal('field_car_insurance_monthly')}
 Annual miles driven: ${getSelect('field_annual_miles')}
 One-way commute: ${getSelect('field_commute')}
 Days per week in office: ${getRadio('office_days')}
@@ -2405,6 +2629,7 @@ SECTION 7: CREDIT CARDS & BANKING
 ----------------------------------------------------------
 Credit score range: ${getRadio('credit_score')}
 Credit card rewards focus: ${getChecked('cc_rewards')}
+Credit cards actively used: ${getVal('field_cc_list')}
 Number of credit cards open: ${getSelect('field_num_cards')}
 Carries a balance month to month: ${getSelect('field_cc_balance')}
 Bank accounts in use: ${getChecked('bank_accounts')}
@@ -2439,7 +2664,6 @@ END OF INTAKE DATA
 }
 
 // ── DETECT RETURN FROM FORMSPREE ─────────────────────────────────────────
-// If Formspree redirects back with ?submitted=1, show our thank-you page
 (function() {
   if (window.location.search.includes('submitted=1')) {
     document.getElementById('page-legal').classList.remove('active');
@@ -2449,32 +2673,18 @@ END OF INTAKE DATA
   }
 })();
 
-// ── FORMSPREE AJAX INIT ───────────────────────────────────────────────────
-// Runs after the @formspree/ajax CDN script loads (defer)
-window.formspree = window.formspree || function() { (formspree.q = formspree.q || []).push(arguments); };
-
-function initFormspree() {
-  if (typeof formspree === 'function' && window._formspreeReady) return;
-  window._formspreeReady = true;
-  formspree('initForm', {
-    formElement: '#intake-form',
-    formId: 'xgopbwdj'
-  });
-}
-
 // ── SUBMIT ────────────────────────────────────────────────────────────────
 function submitForm() {
   const btn = document.getElementById('submit-btn');
   btn.disabled = true;
   btn.innerHTML = '&#8987;&nbsp; Submitting…';
 
-  // Set _next so if XHR fails and browser falls back to native POST,
-  // Formspree redirects back to our page's thank-you state
   const base = window.location.href.split('?')[0].split('#')[0];
   document.getElementById('next_field').value = base + '?submitted=1';
 
   const data = {
-    '_subject': 'New Home Efficiency Report Intake — Neighborly Goods and Services',
+    // CHANGE 1: subject line includes REF_ID
+    '_subject': 'New Intake Submission — ' + REF_ID,
     'Reference ID': REF_ID,
     'Amount Due': '$' + REPORT_PRICE,
     'Signed By': document.getElementById('sig-name').value.trim(),
@@ -2484,6 +2694,7 @@ function submitForm() {
     '1 - Household Type': getSelect('field_household_type'),
     '1 - Household Size': getVal('field_household_size'),
     '1 - Children Ages': getVal('field_children_ages'),
+    '1 - Childcare Settings': getChecked('childcare_setting'),
     '1 - Life Transitions': getChecked('transition'),
     '2 - Gross Income': getVal('field_gross_income'),
     '2 - Take Home Per Check': getVal('field_take_home'),
@@ -2500,9 +2711,15 @@ function submitForm() {
     '3 - Renovation History': getRadio('renovation'),
     '3 - HVAC Systems': getChecked('hvac'),
     '3 - Thermostat': getSelect('field_thermostat'),
+    '3 - Thermostat Brand': getVal('field_thermostat_brand'),
     '3 - Water Heater': getSelect('field_water_heater'),
+    '3 - Stove Type': getRadio('stove_type'),
     '3 - Underutilized Spaces': getChecked('space'),
-    '3 - Home Insurance': getVal('field_home_insurance'),
+    '3 - Home Insurance Provider': getVal('field_home_insurance_provider'),
+    '3 - Home Insurance Monthly': getVal('field_home_insurance_monthly'),
+    '3 - Washer Make Model': getVal('field_washer_model'),
+    '3 - Dryer Make Model': getVal('field_dryer_model'),
+    '3 - Dishwasher Make Model': getVal('field_dishwasher_model'),
     '4 - Electric Bill': getVal('field_electric_bill'),
     '4 - Gas Bill': getVal('field_gas_bill'),
     '4 - Electric Provider': getVal('field_electric_provider'),
@@ -2512,7 +2729,10 @@ function submitForm() {
     '4 - Phone Plan': getVal('field_phone'),
     '4 - Other Utilities': getVal('field_other_utilities'),
     '5 - Vehicles': getSelect('field_num_vehicles'),
-    '5 - Car Insurance': getVal('field_car_insurance'),
+    '5 - Vehicle 1': getVal('field_vehicle_1'),
+    '5 - Vehicle 2': getVal('field_vehicle_2'),
+    '5 - Car Insurance Provider': getVal('field_car_insurance_provider'),
+    '5 - Car Insurance Monthly': getVal('field_car_insurance_monthly'),
     '5 - Annual Miles': getSelect('field_annual_miles'),
     '5 - Commute Distance': getSelect('field_commute'),
     '5 - Office Days Per Week': getRadio('office_days'),
@@ -2525,6 +2745,7 @@ function submitForm() {
     '6 - Warehouse Membership': getRadio('warehouse_membership'),
     '7 - Credit Score': getRadio('credit_score'),
     '7 - CC Rewards Focus': getChecked('cc_rewards'),
+    '7 - CC Cards Used': getVal('field_cc_list'),
     '7 - Number of Cards': getSelect('field_num_cards'),
     '7 - Carries Balance': getSelect('field_cc_balance'),
     '7 - Bank Accounts': getChecked('bank_accounts'),
@@ -2570,13 +2791,11 @@ function showThanks() {
   document.getElementById('page-thanks').classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  // Populate ref ID and price on thank-you page
   var refEl = document.getElementById('thanks-ref-id');
   var priceEl = document.getElementById('thanks-price');
   if (refEl) refEl.textContent = REF_ID;
   if (priceEl) priceEl.textContent = '$' + REPORT_PRICE;
 
-  // Wire up Venmo button with live URL
   var venmoBtn = document.getElementById('venmo-pay-btn');
   if (venmoBtn) {
     venmoBtn.href = buildVenmoUrl();
