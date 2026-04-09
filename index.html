@@ -610,6 +610,12 @@ input:focus, select:focus, textarea:focus {
   box-shadow: 0 0 0 3px rgba(74,124,89,0.1);
 }
 textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+
+/* Lighter placeholder color for all text inputs and textareas */
+input::placeholder, textarea::placeholder {
+  color: var(--ink-xlight);
+  opacity: 1;
+}
 select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2378716c' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
@@ -1400,7 +1406,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
       </div>
       <div class="field-row">
         <div class="field">
-          <label>First name <span class="optional">(optional)</span></label>
+          <label>First name</label>
           <input type="text" name="first_name" id="field_first_name" placeholder="e.g. Sarah">
         </div>
         <div class="field">
@@ -1434,18 +1440,13 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
         <input type="text" name="children_ages" id="field_children_ages" placeholder="e.g. 3, 7, 10" oninput="toggleDaycareField()">
       </div>
 
-      <!-- CHANGE 2: Daycare/school question — conditional on children being present -->
+      <!-- Daycare/school question — conditional on children being present -->
       <div class="conditional-field" id="field_daycare_wrap">
         <div class="field" style="margin-bottom:0;">
-          <label>Do any of your children attend daycare or school outside the home? <span class="hint">Select all that apply</span></label>
-          <div class="check-group">
-            <label><input type="checkbox" name="childcare_setting" value="daycare"> Daycare / childcare center</label>
-            <label><input type="checkbox" name="childcare_setting" value="in_home_daycare"> In-home daycare provider</label>
-            <label><input type="checkbox" name="childcare_setting" value="preschool"> Preschool / pre-K</label>
-            <label><input type="checkbox" name="childcare_setting" value="public_school"> Public school (K–12)</label>
-            <label><input type="checkbox" name="childcare_setting" value="private_school"> Private school</label>
-            <label><input type="checkbox" name="childcare_setting" value="homeschool"> Homeschooled</label>
-            <label><input type="checkbox" name="childcare_setting" value="none_yet"> Not yet / stay at home</label>
+          <label>Do your children attend daycare or school outside the home?</label>
+          <div class="radio-group">
+            <label><input type="radio" name="childcare_outside_home" value="yes"> Yes</label>
+            <label><input type="radio" name="childcare_outside_home" value="no"> No</label>
           </div>
         </div>
       </div>
@@ -1590,15 +1591,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
           </select>
         </div>
       </div>
-      <div class="field">
-        <label>Renovation / weatherization history</label>
-        <div class="radio-group">
-          <label><input type="radio" name="renovation" value="full"> Full gut renovation</label>
-          <label><input type="radio" name="renovation" value="partial"> Partial updates</label>
-          <label><input type="radio" name="renovation" value="no"> No major updates</label>
-          <label><input type="radio" name="renovation" value="unknown"> Not sure</label>
-        </div>
-      </div>
+
       <div class="field">
         <label>Heating &amp; cooling system <span class="hint">Select all that apply</span></label>
         <div class="check-group">
@@ -1893,14 +1886,7 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
       <div class="field-row">
         <div class="field">
           <label>Approximate monthly grocery spend</label>
-          <select name="grocery_spend" id="field_grocery_spend">
-            <option value="">Select…</option>
-            <option>Under $300</option>
-            <option>$300–$500</option>
-            <option>$500–$700</option>
-            <option>$700–$1,000</option>
-            <option>Over $1,000</option>
-          </select>
+          <div class="input-prefix"><span class="prefix">$</span><input type="number" name="grocery_spend" id="field_grocery_spend" placeholder="e.g. 600"></div>
         </div>
         <div class="field">
           <label>How often does your household eat out or order delivery?</label>
@@ -2056,16 +2042,8 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
           <input type="text" name="k401_pct" id="field_k401_pct" placeholder="e.g. 3% match only, 10%, not sure">
         </div>
         <div class="field">
-          <label>Approximate total retirement savings</label>
-          <select name="total_retirement" id="field_total_retirement">
-            <option value="">Select…</option>
-            <option>Under $25k</option>
-            <option>$25k–$75k</option>
-            <option>$75k–$150k</option>
-            <option>$150k–$300k</option>
-            <option>$300k–$500k</option>
-            <option>Over $500k</option>
-          </select>
+          <label>Approximate total retirement savings <span class="hint">Estimate is fine</span></label>
+          <div class="input-prefix"><span class="prefix">$</span><input type="text" name="total_retirement" id="field_total_retirement" placeholder="e.g. 85000"></div>
         </div>
       </div>
       <div class="field">
@@ -2148,7 +2126,6 @@ footer strong { color: rgba(250,250,249,0.55); font-weight: 400; }
           <label><input type="checkbox" name="subscriptions" value="gym"> Gym membership</label>
           <label><input type="checkbox" name="subscriptions" value="meal_kit"> Meal kit service</label>
           <label><input type="checkbox" name="subscriptions" value="clothing"> Clothing subscription</label>
-          <label><input type="checkbox" name="subscriptions" value="other"> Other subscriptions</label>
         </div>
       </div>
       <div class="field">
@@ -2414,9 +2391,9 @@ function toggleDaycareField() {
     wrap.classList.add('visible');
   } else {
     wrap.classList.remove('visible');
-    // Clear selections when hidden
-    document.querySelectorAll('input[name="childcare_setting"]').forEach(function(cb) {
-      cb.checked = false;
+    // Clear radio when hidden
+    document.querySelectorAll('input[name="childcare_outside_home"]').forEach(function(r) {
+      r.checked = false;
     });
   }
 }
@@ -2588,7 +2565,7 @@ ZIP code: ${getVal('field_zip')}
 Household type: ${getSelect('field_household_type')}
 Household size: ${getVal('field_household_size')} people
 Children's ages: ${getVal('field_children_ages')}
-Childcare / school settings: ${getChecked('childcare_setting')}
+Children attend daycare/school outside home: ${getRadio('childcare_outside_home')}
 Life transitions underway: ${getChecked('transition')}
 
 ----------------------------------------------------------
@@ -2610,7 +2587,6 @@ Ownership status: ${getSelect('field_ownership')}
 Monthly housing payment: $${getVal('field_housing_payment')}
 Square footage: ${getSelect('field_sq_ft')}
 Year built: ${getSelect('field_home_age')}
-Renovation / weatherization history: ${getRadio('renovation')}
 Heating & cooling systems: ${getChecked('hvac')}
 Thermostat type: ${getSelect('field_thermostat')}
 Smart thermostat brand: ${getVal('field_thermostat_brand')}
@@ -2651,7 +2627,7 @@ Tracks mileage for tax/reimbursement: ${getRadio('mileage_tracking')}
 ----------------------------------------------------------
 SECTION 6: GROCERIES & SHOPPING
 ----------------------------------------------------------
-Monthly grocery spend: ${getSelect('field_grocery_spend')}
+Monthly grocery spend: $${getVal('field_grocery_spend')}
 Frequency eating out / delivery: ${getSelect('field_eating_out')}
 Primary grocery stores: ${getChecked('grocery_stores')}
 Savings apps / coupon usage: ${getChecked('coupon_apps')}
@@ -2674,7 +2650,7 @@ SECTION 8: RETIREMENT, BENEFITS & TAXES
 ----------------------------------------------------------
 Retirement accounts contributing to: ${getChecked('retirement')}
 401k contribution rate: ${getVal('field_k401_pct')}
-Total retirement savings: ${getSelect('field_total_retirement')}
+Total retirement savings: $${getVal('field_total_retirement')}
 Tax-advantaged accounts in use: ${getChecked('tax_accounts')}
 Tax filing method: ${getRadio('tax_filing')}
 Tax strategies in use: ${getChecked('tax_strategies')}
@@ -2731,7 +2707,7 @@ function submitForm() {
     '1 - Household Type': getSelect('field_household_type'),
     '1 - Household Size': getVal('field_household_size'),
     '1 - Children Ages': getVal('field_children_ages'),
-    '1 - Childcare Settings': getChecked('childcare_setting'),
+    '1 - Childcare Outside Home': getRadio('childcare_outside_home'),
     '1 - Life Transitions': getChecked('transition'),
     '2 - Gross Income': getVal('field_gross_income'),
     '2 - Take Home Per Check': getVal('field_take_home'),
@@ -2745,7 +2721,6 @@ function submitForm() {
     '3 - Housing Payment': getVal('field_housing_payment'),
     '3 - Square Footage': getSelect('field_sq_ft'),
     '3 - Year Built': getSelect('field_home_age'),
-    '3 - Renovation History': getRadio('renovation'),
     '3 - HVAC Systems': getChecked('hvac'),
     '3 - Thermostat': getSelect('field_thermostat'),
     '3 - Thermostat Brand': getVal('field_thermostat_brand'),
@@ -2774,7 +2749,7 @@ function submitForm() {
     '5 - Commute Distance': getSelect('field_commute'),
     '5 - Office Days Per Week': getRadio('office_days'),
     '5 - Mileage Tracking': getRadio('mileage_tracking'),
-    '6 - Monthly Grocery Spend': getSelect('field_grocery_spend'),
+    '6 - Monthly Grocery Spend': getVal('field_grocery_spend'),
     '6 - Eating Out Frequency': getSelect('field_eating_out'),
     '6 - Grocery Stores': getChecked('grocery_stores'),
     '6 - Coupon Apps': getChecked('coupon_apps'),
@@ -2794,7 +2769,7 @@ function submitForm() {
     '7 - Section Comments': getVal('field_s7_comments'),
     '8 - Retirement Accounts': getChecked('retirement'),
     '8 - 401k Rate': getVal('field_k401_pct'),
-    '8 - Total Retirement Savings': getSelect('field_total_retirement'),
+    '8 - Total Retirement Savings': getVal('field_total_retirement'),
     '8 - Tax Advantaged Accounts': getChecked('tax_accounts'),
     '8 - Tax Filing Method': getRadio('tax_filing'),
     '8 - Tax Strategies': getChecked('tax_strategies'),
